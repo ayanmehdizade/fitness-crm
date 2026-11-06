@@ -3,7 +3,7 @@ import {
   Users, Search, Instagram, Clock, UserCheck, X, SlidersHorizontal, 
   RefreshCw, MessageSquare, Download, FileSpreadsheet, FileText, FileCode, Check,
   CreditCard, Key, Car, Calendar, DollarSign, Snowflake, Activity, Scissors, Sparkles, HandHeart, Dumbbell,
-  Receipt, ShieldCheck, Wallet, User, Info, Camera, Upload, Trash2
+  Receipt, ShieldCheck, Wallet, User, Info, Camera, Upload, Trash2, Ticket, Tag, Plus, Building2, UserPlus, ArrowRight, ArrowRightLeft, Lock, Edit3, LogIn, LogOut
 } from 'lucide-react';
 
 const initialLeads = [
@@ -18,6 +18,7 @@ const initialLeads = [
     stage: 'tour',
     interest: 'VIP 12 Aylıq + PT',
     assignedTo: 'Ayan X.',
+    voucherCode: '',
     notes: [
       { date: '28.10.2026', author: 'Ayan X.', text: 'Direct-dən VIP paket qiymətini soruşdu. Kluba sınaq turuna dəvət olundu.' },
       { date: '29.10.2026', author: 'Ayan X.', text: '30 Oktyabr saat 15:00 üçün klub turu təyin edildi.' }
@@ -35,8 +36,26 @@ const initialLeads = [
     stage: 'potential',
     interest: 'Gündüz Tarifi 3 Aylıq',
     assignedTo: 'Orxan M.',
+    voucherCode: '',
     notes: [
       { date: '27.10.2026', author: 'Orxan M.', text: 'Sınaq məşqində oldu. Həyat yoldaşı ilə məsləhətləşəcəyini bildirdi.' }
+    ],
+    lostReason: ''
+  },
+  {
+    id: 'LED-803',
+    name: 'Leyla Məmmədova',
+    phone: '+994 70 555 33 22',
+    gender: 'Qadın',
+    channel: 'Voucher',
+    requestTime: '29.10.2026 | 16:20',
+    rawDate: '2026-10-29',
+    stage: 'new',
+    interest: '1 Aylıq Promo Keçid',
+    assignedTo: 'Ayan X.',
+    voucherCode: 'VCH-2026-X89',
+    notes: [
+      { date: '29.10.2026', author: 'Ayan X.', text: 'Kupon kodu ilə daxil oldu (VCH-2026-X89). Dəvətnamə aktivləşdirildi.' }
     ],
     lostReason: ''
   }
@@ -54,6 +73,9 @@ const initialClients = [
     city: 'Bakı',
     status: 'active',
     statusText: 'Aktivdir',
+    registrationType: 'Standard',
+    companyName: '',
+    voucherCode: '',
     membershipPackage: 'VIP Gold Limitsiz (1 İllik)',
     startDate: '15.01.2026',
     endDate: '15.01.2027',
@@ -61,6 +83,17 @@ const initialClients = [
     totalSpentUnit: 'AZN',
     isFrozen: false,
     freezeDaysLeft: 14,
+    lockerRental: {
+      hasLocker: true,
+      lockerNumber: 'A-42 (VIP Şkaf)',
+      sector: 'VIP Xanımlar Zonu',
+      startDate: '15.01.2026',
+      endDate: '15.01.2027',
+      monthlyFeeVal: '40.00',
+      status: 'active',
+      statusText: 'Ərəndə Aktivdir',
+      keyDepositPaid: true
+    },
     privileges: [
       'Limitsiz Fitnes & Kardio Keçidi',
       'VIP Locker & Hamam/Sauna Keçidi',
@@ -77,6 +110,14 @@ const initialClients = [
       depositBalanceVal: '350.00',
       depositBalanceUnit: 'AZN'
     },
+    // GİRİŞ VƏ ÇIXIŞ QAPILARI VƏ TURNİKET TARİXÇƏSİ
+    gateLogs: [
+      { id: 'GL-101', date: '28.10.2026', time: '17:45', actionType: 'exit', gateName: 'Əsas Giriş Turniketi (B-Qapısı)', status: 'Uğurlu Çıxış' },
+      { id: 'GL-102', date: '28.10.2026', time: '17:30', actionType: 'exit', gateName: 'VIP Xanımlar Zonu Qapısı', status: 'Uğurlu Çıxış' },
+      { id: 'GL-103', date: '28.10.2026', time: '14:30', actionType: 'entry', gateName: 'VIP Xanımlar Zonu Qapısı', status: 'Uğurlu Giriş' },
+      { id: 'GL-104', date: '28.10.2026', time: '14:25', actionType: 'entry', gateName: 'Əsas Giriş Turniketi (A-Qapısı)', status: 'Uğurlu Giriş' },
+      { id: 'GL-105', date: '28.10.2026', time: '14:20', actionType: 'entry', gateName: 'VIP Avtoparkinq Şlaqbaum Qapısı', status: 'Uğurlu Keçid' }
+    ],
     transactions: [
       { 
         id: 'TR-9011', 
@@ -99,6 +140,17 @@ const initialClients = [
         type: 'POS Kart', 
         location: 'Wellness Spa Resepşn', 
         processedBy: 'Ayan X. (Supervisor)' 
+      },
+      { 
+        id: 'TR-8102', 
+        date: '15.01.2026', 
+        time: '11:00', 
+        item: 'İllik Şəxsi Şkaf (VIP Locker A-42) Arendası', 
+        amountVal: '480.00', 
+        amountUnit: 'AZN',
+        type: 'POS Kart', 
+        location: 'Əsas Resepşn', 
+        processedBy: 'Ayan X. (Supervisor)' 
       }
     ],
     accessHistory: [
@@ -120,6 +172,9 @@ const initialClients = [
     city: 'Bakı',
     status: 'warning', 
     statusText: 'Yenilənmə Sual Altındadır',
+    registrationType: 'Corporate',
+    companyName: 'SOCAR IT Department',
+    voucherCode: 'VCH-CORP-99',
     membershipPackage: 'Standart (6 Aylıq)',
     startDate: '01.06.2026',
     endDate: '01.11.2026',
@@ -127,6 +182,17 @@ const initialClients = [
     totalSpentUnit: 'AZN',
     isFrozen: false,
     freezeDaysLeft: 0,
+    lockerRental: {
+      hasLocker: false,
+      lockerNumber: '',
+      sector: '',
+      startDate: '',
+      endDate: '',
+      monthlyFeeVal: '0.00',
+      status: 'none',
+      statusText: 'Arenda Yoxdur',
+      keyDepositPaid: false
+    },
     privileges: [
       'Standart Zal Keçidi (08:00 - 23:00)',
       'Ümumi Şkaf Keçidi'
@@ -139,16 +205,54 @@ const initialClients = [
       depositBalanceVal: '0.00',
       depositBalanceUnit: 'AZN'
     },
+    gateLogs: [
+      { id: 'GL-201', date: '27.10.2026', time: '21:10', actionType: 'exit', gateName: 'Əsas Giriş Turniketi (A-Qapısı)', status: 'Uğurlu Çıxış' },
+      { id: 'GL-202', date: '27.10.2026', time: '19:00', actionType: 'entry', gateName: 'Əsas Giriş Turniketi (A-Qapısı)', status: 'Uğurlu Giriş' }
+    ],
     transactions: [],
     accessHistory: [],
     appointments: []
   }
 ];
 
+const initialVouchers = [
+  {
+    id: 'VCH-1001',
+    code: 'VCH-2026-X89',
+    type: 'Gift Voucher (Hədiyyə)',
+    package: '1 Aylıq Limitsiz Fitnes + InBody',
+    clientName: 'Leyla Məmmədova',
+    clientPhone: '+994 70 555 33 22',
+    issuer: 'Ayan X. (Supervisor)',
+    partnerCompany: 'Pasha Holding Corp',
+    issueDate: '15.10.2026',
+    expiryDate: '15.11.2026',
+    status: 'active',
+    discountVal: '100%',
+    notes: 'Корпоративный подарок сотруднику года.'
+  },
+  {
+    id: 'VCH-1002',
+    code: 'VCH-CORP-99',
+    type: 'Corporate B2B',
+    package: 'Standart (6 Aylıq)',
+    clientName: 'Kamran Alıyev',
+    clientPhone: '+994 55 444 55 66',
+    issuer: 'Orxan M. (Sales Manager)',
+    partnerCompany: 'SOCAR IT Department',
+    issueDate: '01.06.2026',
+    expiryDate: '01.12.2026',
+    status: 'used',
+    discountVal: '30%',
+    notes: 'Скидочный ваучер по договоренности с партнёром.'
+  }
+];
+
 export default function CRM() {
-  const [activeTab, setActiveTab] = useState('clients'); // 'clients' | 'leads'
+  const [activeTab, setActiveTab] = useState('clients');
   const [clients, setClients] = useState(initialClients);
   const [leads, setLeads] = useState(initialLeads);
+  const [vouchers, setVouchers] = useState(initialVouchers);
   const [searchQuery, setSearchQuery] = useState('');
 
   const [showFilterPanel, setShowFilterPanel] = useState(false);
@@ -165,10 +269,59 @@ export default function CRM() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [newNoteText, setNewNoteText] = useState('');
 
+  const [statusChangeModalLead, setStatusChangeModalLead] = useState(null);
+  const [newStageInput, setNewStageInput] = useState('');
+  const [stageNoteInput, setStageNoteInput] = useState('');
+
+  const [transferModalLead, setTransferModalLead] = useState(null);
+  const [transferFormData, setTransferFormData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    birthYear: '2000',
+    gender: 'Qadın',
+    city: 'Bakı',
+    registrationType: 'Standard',
+    companyName: '',
+    membershipPackage: 'VIP Gold Limitsiz (1 İllik)',
+    voucherCode: '',
+    photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300'
+  });
+
+  const [courseTransferModalClient, setCourseTransferModalClient] = useState(null);
+  const [courseTransferData, setCourseTransferData] = useState({
+    targetClientName: '',
+    targetClientPhone: '',
+    transferReason: ''
+  });
+
+  const [lockerModalClient, setLockerModalClient] = useState(null);
+  const [lockerFormData, setLockerFormData] = useState({
+    lockerNumber: '',
+    sector: 'Kişi Zonu',
+    startDate: '',
+    endDate: '',
+    monthlyFeeVal: '30.00',
+    keyDepositPaid: true
+  });
+
   const [isEditProfileMode, setIsEditProfileMode] = useState(false);
   const [editFormData, setEditFormData] = useState({});
 
-  const [freezeDaysInput, setFreezeDaysInput] = useState(7);
+  const [showNewVoucherModal, setShowNewVoucherModal] = useState(false);
+  const [newVoucherData, setNewVoucherData] = useState({
+    code: '',
+    type: 'Gift Voucher (Hədiyyə)',
+    package: '1 Aylıq Limitsiz Fitnes',
+    clientName: '',
+    clientPhone: '',
+    partnerCompany: '',
+    issuer: 'Ayan X. (Supervisor)',
+    expiryDate: '',
+    discountVal: '100%',
+    notes: ''
+  });
+
   const [profileSaveSuccess, setProfileSaveSuccess] = useState('');
 
   const fontDisplayStyle = { fontFamily: "'Archivo Expanded', sans-serif", letterSpacing: '-0.02em' };
@@ -177,7 +330,8 @@ export default function CRM() {
   const filteredLeads = leads.filter(lead => {
     const matchesSearch = lead.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
                           lead.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                          lead.phone.includes(searchQuery);
+                          lead.phone.includes(searchQuery) ||
+                          (lead.voucherCode && lead.voucherCode.toLowerCase().includes(searchQuery.toLowerCase()));
 
     const matchesChannel = filterChannel === 'all' || lead.channel === filterChannel;
     const matchesStage = filterStage === 'all' || lead.stage === filterStage;
@@ -193,7 +347,17 @@ export default function CRM() {
   const filteredClients = clients.filter(client => 
     client.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
     client.id.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    client.phone.includes(searchQuery)
+    client.phone.includes(searchQuery) ||
+    (client.companyName && client.companyName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (client.lockerRental && client.lockerRental.lockerNumber && client.lockerRental.lockerNumber.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (client.voucherCode && client.voucherCode.toLowerCase().includes(searchQuery.toLowerCase()))
+  );
+
+  const filteredVouchers = vouchers.filter(v => 
+    v.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    v.clientName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    v.partnerCompany.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    v.package.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   const resetFilters = () => {
@@ -239,32 +403,297 @@ export default function CRM() {
     setTimeout(() => setProfileSaveSuccess(''), 3000);
   };
 
-  const handleAddNoteToLead = (e) => {
+  const handleCreateVoucher = (e) => {
     e.preventDefault();
-    if (!newNoteText.trim() || !selectedLead) return;
+    const autoCode = newVoucherData.code.trim() ? newVoucherData.code.toUpperCase() : `VCH-2026-${Math.floor(100 + Math.random() * 900)}`;
+    const created = {
+      id: `VCH-${Math.floor(1000 + Math.random() * 9000)}`,
+      ...newVoucherData,
+      code: autoCode,
+      issueDate: new Date().toLocaleDateString('az-AZ'),
+      status: 'active'
+    };
 
-    const updatedNote = {
+    setVouchers([created, ...vouchers]);
+    setShowNewVoucherModal(false);
+    setExportSuccess(`Vauçer uğurla yaradıldı: ${created.code}`);
+    setTimeout(() => setExportSuccess(''), 3000);
+    setNewVoucherData({
+      code: '',
+      type: 'Gift Voucher (Hədiyyə)',
+      package: '1 Aylıq Limitsiz Fitnes',
+      clientName: '',
+      clientPhone: '',
+      partnerCompany: '',
+      issuer: 'Ayan X. (Supervisor)',
+      expiryDate: '',
+      discountVal: '100%',
+      notes: ''
+    });
+  };
+
+  const handleOpenStatusModal = (lead) => {
+    setStatusChangeModalLead(lead);
+    setNewStageInput(lead.stage);
+    setStageNoteInput('');
+  };
+
+  const handleSaveStatusWithNote = (e) => {
+    e.preventDefault();
+    if (!stageNoteInput.trim()) {
+      alert('Zəhmət olmasa status dəyişikliyi üçün məcburi not/şərh yazın!');
+      return;
+    }
+
+    const stageNames = {
+      new: '🆕 Yeni Lid',
+      contacted: '📞 Əlaqə Saxlanıldı',
+      tour: '🏋️ Tur Təyin Edildi',
+      potential: '🤔 Düşünür',
+      won: '✅ Paket Aldı',
+      lost: '❌ İmtina Etdi'
+    };
+
+    const newNote = {
       date: new Date().toLocaleDateString('az-AZ'),
       author: 'Ayan X.',
-      text: newNoteText
+      text: `Status yeniləndi [${stageNames[newStageInput] || newStageInput}]: ${stageNoteInput}`
     };
 
     const updatedLeads = leads.map(l => {
-      if (l.id === selectedLead.id) {
-        return { ...l, notes: [updatedNote, ...l.notes] };
+      if (l.id === statusChangeModalLead.id) {
+        return {
+          ...l,
+          stage: newStageInput,
+          notes: [newNote, ...l.notes]
+        };
       }
       return l;
     });
 
     setLeads(updatedLeads);
-    setSelectedLead({ ...selectedLead, notes: [updatedNote, ...selectedLead.notes] });
-    setNewNoteText('');
+    setStatusChangeModalLead(null);
+    setExportSuccess(`Status uğurla yeniləndi və not yazıldı!`);
+    setTimeout(() => setExportSuccess(''), 3000);
   };
 
-  const handleStageChange = (leadId, newStage) => {
-    const updated = leads.map(l => l.id === leadId ? { ...l, stage: newStage } : l);
-    setLeads(updated);
-    if (selectedLead) setSelectedLead({ ...selectedLead, stage: newStage });
+  const handleOpenTransferModal = (lead) => {
+    setTransferModalLead(lead);
+    setTransferFormData({
+      name: lead.name,
+      phone: lead.phone,
+      email: `${lead.name.toLowerCase().replace(/\s+/g, '.')}@gmail.com`,
+      birthYear: '2000',
+      gender: lead.gender || 'Qadın',
+      city: 'Bakı',
+      registrationType: lead.channel === 'Voucher' ? 'Voucher' : 'Standard',
+      companyName: '',
+      membershipPackage: lead.interest || 'VIP Gold Limitsiz (1 İllik)',
+      voucherCode: lead.voucherCode || '',
+      photo: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=300'
+    });
+  };
+
+  const handleCompleteTransferToClient = (e) => {
+    e.preventDefault();
+    const createdClient = {
+      id: `MK-${Math.floor(1000 + Math.random() * 9000)}`,
+      name: transferFormData.name,
+      phone: transferFormData.phone,
+      email: transferFormData.email,
+      photo: transferFormData.photo,
+      birthYear: transferFormData.birthYear,
+      gender: transferFormData.gender,
+      city: transferFormData.city,
+      status: 'active',
+      statusText: 'Aktivdir',
+      registrationType: transferFormData.registrationType,
+      companyName: transferFormData.registrationType === 'Corporate' ? transferFormData.companyName : '',
+      voucherCode: transferFormData.voucherCode,
+      membershipPackage: transferFormData.membershipPackage,
+      startDate: new Date().toLocaleDateString('az-AZ'),
+      endDate: '15.01.2027',
+      totalSpentVal: '0.00',
+      totalSpentUnit: 'AZN',
+      isFrozen: false,
+      freezeDaysLeft: 14,
+      lockerRental: {
+        hasLocker: false,
+        lockerNumber: '',
+        sector: '',
+        startDate: '',
+        endDate: '',
+        monthlyFeeVal: '0.00',
+        status: 'none',
+        statusText: 'Arenda Yoxdur',
+        keyDepositPaid: false
+      },
+      privileges: [
+        'Limitsiz Fitnes & Kardio Keçidi',
+        'VIP Locker & Hamam/Sauna Keçidi',
+        '14 Günlük Paket Dondurma Hüququ'
+      ],
+      ptBalance: {
+        trainerName: 'Təyin olunmayıb',
+        totalSessions: 0,
+        usedSessions: 0,
+        remainingSessions: 0,
+        depositBalanceVal: '0.00',
+        depositBalanceUnit: 'AZN'
+      },
+      gateLogs: [],
+      transactions: [],
+      accessHistory: [],
+      appointments: []
+    };
+
+    setClients([createdClient, ...clients]);
+    setLeads(leads.filter(l => l.id !== transferModalLead.id));
+    setTransferModalLead(null);
+    setExportSuccess(`${createdClient.name} müvəffəqiyyətlə Müştəri Bazasına transfer edildi!`);
+    setTimeout(() => setExportSuccess(''), 3000);
+  };
+
+  const handleOpenCourseTransferModal = (client) => {
+    setCourseTransferModalClient(client);
+    setCourseTransferData({
+      targetClientName: '',
+      targetClientPhone: '',
+      transferReason: ''
+    });
+  };
+
+  const handleExecuteCourseTransfer = (e) => {
+    e.preventDefault();
+    if (!courseTransferModalClient) return;
+
+    const sourcePackage = courseTransferModalClient.membershipPackage;
+    const targetName = courseTransferData.targetClientName;
+    const targetPhone = courseTransferData.targetClientPhone;
+
+    const existingTargetIndex = clients.findIndex(c => c.phone.includes(targetPhone) || c.name.toLowerCase() === targetName.toLowerCase());
+
+    let updatedClientsList = [...clients];
+
+    if (existingTargetIndex !== -1) {
+      updatedClientsList[existingTargetIndex] = {
+        ...updatedClientsList[existingTargetIndex],
+        membershipPackage: sourcePackage,
+        status: 'active',
+        statusText: 'Aktivdir (Transfer gəldi)',
+        ptBalance: { ...courseTransferModalClient.ptBalance }
+      };
+    } else {
+      const newTransferredClient = {
+        id: `MK-${Math.floor(1000 + Math.random() * 9000)}`,
+        name: targetName,
+        phone: targetPhone || '+994 50 000 00 00',
+        email: `${targetName.toLowerCase().replace(/\s+/g, '.')}@gmail.com`,
+        photo: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=300',
+        birthYear: '1995',
+        gender: 'Qadın',
+        city: 'Bakı',
+        status: 'active',
+        statusText: 'Aktivdir (Transfer gəldi)',
+        registrationType: 'Standard',
+        companyName: '',
+        voucherCode: '',
+        membershipPackage: sourcePackage,
+        startDate: new Date().toLocaleDateString('az-AZ'),
+        endDate: courseTransferModalClient.endDate,
+        totalSpentVal: '0.00',
+        totalSpentUnit: 'AZN',
+        isFrozen: false,
+        freezeDaysLeft: 14,
+        lockerRental: { hasLocker: false, lockerNumber: '', sector: '', startDate: '', endDate: '', monthlyFeeVal: '0.00', status: 'none', statusText: 'Arenda Yoxdur', keyDepositPaid: false },
+        privileges: [...courseTransferModalClient.privileges],
+        ptBalance: { ...courseTransferModalClient.ptBalance },
+        gateLogs: [],
+        transactions: [],
+        accessHistory: [],
+        appointments: []
+      };
+      updatedClientsList.unshift(newTransferredClient);
+    }
+
+    updatedClientsList = updatedClientsList.map(c => {
+      if (c.id === courseTransferModalClient.id) {
+        return {
+          ...c,
+          membershipPackage: 'Paket Transfer Edildi ➡️ ' + targetName,
+          status: 'warning',
+          statusText: 'Paket Başqasına Keçdi',
+          ptBalance: { trainerName: 'Yoxdur', totalSessions: 0, usedSessions: 0, remainingSessions: 0, depositBalanceVal: '0.00', depositBalanceUnit: 'AZN' }
+        };
+      }
+      return c;
+    });
+
+    setClients(updatedClientsList);
+
+    if (selectedClient && selectedClient.id === courseTransferModalClient.id) {
+      setSelectedClient({
+        ...selectedClient,
+        membershipPackage: 'Paket Transfer Edildi ➡️ ' + targetName,
+        statusText: 'Paket Başqasına Keçdi'
+      });
+    }
+
+    setCourseTransferModalClient(null);
+    setExportSuccess(`" ${sourcePackage} " paketi uğurla ${targetName} adlı şəxsə transfer edildi!`);
+    setTimeout(() => setExportSuccess(''), 4000);
+  };
+
+  const handleOpenLockerModal = (client) => {
+    setLockerModalClient(client);
+    setLockerFormData({
+      lockerNumber: client.lockerRental?.lockerNumber || '',
+      sector: client.lockerRental?.sector || 'VIP Xanımlar Zonu',
+      startDate: new Date().toISOString().split('T')[0],
+      endDate: '2027-01-15',
+      monthlyFeeVal: client.lockerRental?.monthlyFeeVal || '40.00',
+      keyDepositPaid: true
+    });
+  };
+
+  const handleSaveLockerRental = (e) => {
+    e.preventDefault();
+    if (!lockerModalClient) return;
+
+    const newLockerObj = {
+      hasLocker: true,
+      lockerNumber: lockerFormData.lockerNumber || 'L-101',
+      sector: lockerFormData.sector,
+      startDate: lockerFormData.startDate,
+      endDate: lockerFormData.endDate,
+      monthlyFeeVal: lockerFormData.monthlyFeeVal,
+      status: 'active',
+      statusText: 'Ərəndə Aktivdir',
+      keyDepositPaid: lockerFormData.keyDepositPaid
+    };
+
+    const updatedClientsList = clients.map(c => {
+      if (c.id === lockerModalClient.id) {
+        return {
+          ...c,
+          lockerRental: newLockerObj
+        };
+      }
+      return c;
+    });
+
+    setClients(updatedClientsList);
+
+    if (selectedClient && selectedClient.id === lockerModalClient.id) {
+      setSelectedClient({
+        ...selectedClient,
+        lockerRental: newLockerObj
+      });
+    }
+
+    setLockerModalClient(null);
+    setExportSuccess(`Şəxsi Şkaf Arendası müvəffəqiyyətlə rəsmiləşdirildi: ${newLockerObj.lockerNumber}`);
+    setTimeout(() => setExportSuccess(''), 4000);
   };
 
   return (
@@ -278,9 +707,9 @@ export default function CRM() {
           </div>
           <div>
             <h3 style={fontDisplayStyle} className="font-black text-slate-900 text-xs tracking-wider uppercase">
-              MAKFIT — CRM & Social Pipeline
+              MAKFIT — CRM & Voucher Pipeline
             </h3>
-            <p style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">Müştəri profilləri, daxil olan müraciətlər və idarəetmə</p>
+            <p style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">Müştəri profilləri, daxil olan müraciətlər, Vauçer və Şkaf (Locker) idarəetməsi</p>
           </div>
         </div>
 
@@ -323,7 +752,7 @@ export default function CRM() {
             )}
           </div>
 
-          {/* TAB BUTTONS (CLIENTS / LEADS) */}
+          {/* TAB BUTTONS (CLIENTS / LEADS / VOUCHERS) */}
           <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 text-[11px]">
             <button
               onClick={() => setActiveTab('clients')}
@@ -332,7 +761,7 @@ export default function CRM() {
                 activeTab === 'clients' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <UserCheck size={12} /> Müştəri Bazası ({clients.length})
+              <UserCheck size={12} /> Müştərilər ({clients.length})
             </button>
             <button
               onClick={() => setActiveTab('leads')}
@@ -343,13 +772,22 @@ export default function CRM() {
             >
               <Instagram size={12} /> Lidlər ({leads.length})
             </button>
+            <button
+              onClick={() => setActiveTab('vouchers')}
+              style={fontTextStyle}
+              className={`px-3 py-1.5 rounded-lg transition-all cursor-pointer flex items-center gap-1 font-extrabold ${
+                activeTab === 'vouchers' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <Ticket size={12} /> Vauçerlər ({vouchers.length})
+            </button>
           </div>
         </div>
       </div>
 
       {/* NOTIFICATION */}
       {exportSuccess && (
-        <div style={fontTextStyle} className="mx-2 bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-2 shadow-2xs">
+        <div style={fontTextStyle} className="mx-2 bg-emerald-50 border border-emerald-200 text-emerald-800 px-3 py-1.5 rounded-xl text-xs font-extrabold flex items-center gap-2 shadow-2xs animate-in fade-in">
           <Check size={14} className="text-emerald-600" /> {exportSuccess}
         </div>
       )}
@@ -362,12 +800,25 @@ export default function CRM() {
             <input 
               style={fontTextStyle}
               type="text" 
-              placeholder={activeTab === 'clients' ? "Axtarış (ID, Ad, Tel)..." : "Lid axtarışı..."}
+              placeholder={
+                activeTab === 'clients' ? "Axtarış (ID, Ad, Tel, Şkaf №, Şirkət)..." :
+                activeTab === 'leads' ? "Lid axtarışı..." : "Vauçer kodu, Şirkət və ya Müştəri..."
+              }
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="w-full pl-8 pr-2 py-1.5 border border-slate-200 rounded-xl text-xs font-extrabold bg-slate-50 focus:outline-none focus:border-blue-500 transition"
             />
           </div>
+
+          {activeTab === 'vouchers' && (
+            <button
+              onClick={() => setShowNewVoucherModal(true)}
+              style={fontTextStyle}
+              className="px-3.5 py-1.5 bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs rounded-xl flex items-center gap-1.5 transition cursor-pointer shadow-xs"
+            >
+              <Plus size={14} /> Yeni Vauçer Yarat
+            </button>
+          )}
 
           {activeTab === 'leads' && (
             <div className="flex items-center gap-1.5">
@@ -395,53 +846,6 @@ export default function CRM() {
             </div>
           )}
         </div>
-
-        {/* LEADS FILTER EXTENSION */}
-        {activeTab === 'leads' && showFilterPanel && (
-          <div className="pt-2 border-t border-slate-100 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-2 text-[10px]">
-            <div>
-              <label style={fontTextStyle} className="font-extrabold text-slate-500 block mb-0.5">Mənbə / Kanal:</label>
-              <select style={fontTextStyle} value={filterChannel} onChange={e => setFilterChannel(e.target.value)} className="w-full p-1 border border-slate-200 rounded-lg bg-slate-50 text-slate-800 font-extrabold outline-none">
-                <option value="all">Hamısı</option>
-                <option value="Instagram">Instagram</option>
-                <option value="WhatsApp">WhatsApp</option>
-                <option value="TikTok">TikTok</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={fontTextStyle} className="font-extrabold text-slate-500 block mb-0.5">Mərhələ:</label>
-              <select style={fontTextStyle} value={filterStage} onChange={e => setFilterStage(e.target.value)} className="w-full p-1 border border-slate-200 rounded-lg bg-slate-50 text-slate-800 font-extrabold outline-none">
-                <option value="all">Hamısı</option>
-                <option value="new">🆕 Yeni Lid</option>
-                <option value="contacted">📞 Əlaqə Saxlanıldı</option>
-                <option value="tour">🏋️ Tur Təyin Edildi</option>
-                <option value="potential">🤔 Düşünür</option>
-                <option value="won">✅ Paket Aldı</option>
-                <option value="lost">❌ İmtina Etdi</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={fontTextStyle} className="font-extrabold text-slate-500 block mb-0.5">Cinsiyyət:</label>
-              <select style={fontTextStyle} value={filterGender} onChange={e => setFilterGender(e.target.value)} className="w-full p-1 border border-slate-200 rounded-lg bg-slate-50 text-slate-800 font-extrabold outline-none">
-                <option value="all">Hamısı</option>
-                <option value="Qadın">Qadın</option>
-                <option value="Kişi">Kişi</option>
-              </select>
-            </div>
-
-            <div>
-              <label style={fontTextStyle} className="font-extrabold text-slate-500 block mb-0.5">Tarixdən:</label>
-              <input style={fontTextStyle} type="date" value={filterStartDate} onChange={e => setFilterStartDate(e.target.value)} className="w-full p-0.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-800 font-extrabold" />
-            </div>
-
-            <div>
-              <label style={fontTextStyle} className="font-extrabold text-slate-500 block mb-0.5">Tarixədək:</label>
-              <input style={fontTextStyle} type="date" value={filterEndDate} onChange={e => setFilterEndDate(e.target.value)} className="w-full p-0.5 border border-slate-200 rounded-lg bg-slate-50 text-slate-800 font-extrabold" />
-            </div>
-          </div>
-        )}
       </div>
 
       {/* 3. MAIN TABLES CONTAINER */}
@@ -456,9 +860,10 @@ export default function CRM() {
                   <th style={fontTextStyle} className="p-3 border-r border-slate-200">Müştəri ID</th>
                   <th style={fontTextStyle} className="p-3 border-r border-slate-200">Foto & Ad Soyad</th>
                   <th style={fontTextStyle} className="p-3 border-r border-slate-200">Telefon Nömrəsi</th>
-                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Status</th>
-                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Qeydiyyat Müddəti</th>
-                  <th style={fontTextStyle} className="p-3 text-right">Ətraflı Mini Dashboard</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Kateqoriya Və Mənbə</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Cari Paket / Kurs</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">🔑 Şəxsi Şkaf (Locker) Statusu</th>
+                  <th style={fontTextStyle} className="p-3 text-right">Ətraflı & Kurs Transferi</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
@@ -476,23 +881,68 @@ export default function CRM() {
                     </td>
                     <td style={fontDisplayStyle} className="p-3 border-r border-slate-100 font-black text-slate-800">{client.phone}</td>
                     <td className="p-3 border-r border-slate-100">
-                      <span style={fontTextStyle} className={`p-1 rounded-lg font-extrabold text-[10px] border ${
-                        client.status === 'active' 
-                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200' 
-                          : 'bg-amber-50 text-amber-800 border-amber-200'
-                      }`}>
-                        {client.statusText}
-                      </span>
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        {client.registrationType === 'Corporate' ? (
+                          <span style={fontTextStyle} className="bg-blue-50 text-blue-800 border border-blue-200 px-2 py-0.5 rounded-lg font-black text-[10px] flex items-center gap-1">
+                            <Building2 size={11} className="text-blue-600" /> {client.companyName || 'Korporativ'}
+                          </span>
+                        ) : client.registrationType === 'Voucher' ? (
+                          <span style={fontTextStyle} className="bg-purple-50 text-purple-700 border border-purple-200 px-2 py-0.5 rounded-lg font-black text-[10px] flex items-center gap-1" title={`Voucher: ${client.voucherCode}`}>
+                            <Ticket size={11} /> Voucher ({client.voucherCode || 'Aktiv'})
+                          </span>
+                        ) : (
+                          <span style={fontTextStyle} className="bg-slate-100 text-slate-700 border border-slate-200 px-2 py-0.5 rounded-lg font-extrabold text-[10px]">
+                            Standart Alış
+                          </span>
+                        )}
+                      </div>
                     </td>
-                    <td style={fontTextStyle} className="p-3 border-r border-slate-100 text-slate-600 text-[10px] font-extrabold">{client.startDate} - {client.endDate}</td>
+                    <td className="p-3 border-r border-slate-100">
+                      <span style={fontTextStyle} className="font-extrabold text-slate-900 block text-[11px]">{client.membershipPackage}</span>
+                      <span style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">{client.startDate} - {client.endDate}</span>
+                    </td>
+
+                    {/* LOCKER STATUS COLUMN */}
+                    <td className="p-3 border-r border-slate-100">
+                      {client.lockerRental && client.lockerRental.hasLocker ? (
+                        <div className="flex items-center gap-1.5">
+                          <span style={fontDisplayStyle} className="bg-emerald-50 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-black text-[10px] flex items-center gap-1">
+                            <Lock size={11} className="text-emerald-600" /> {client.lockerRental.lockerNumber}
+                          </span>
+                          <span style={fontTextStyle} className="text-[10px] text-slate-500 font-extrabold">({client.lockerRental.monthlyFeeVal} AZN/ay)</span>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={() => handleOpenLockerModal(client)}
+                          style={fontTextStyle}
+                          className="text-slate-400 hover:text-blue-600 font-extrabold text-[10px] bg-slate-50 hover:bg-blue-50 px-2 py-0.5 rounded-md border border-slate-200 hover:border-blue-200 transition inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <Lock size={10} /> + Şkaf Arenda Et
+                        </button>
+                      )}
+                    </td>
+
                     <td className="p-3 text-right">
-                      <button 
-                        onClick={() => handleOpenClientModal(client)}
-                        style={fontTextStyle}
-                        className="bg-blue-600 hover:bg-blue-700 text-white px-3.5 py-1.5 rounded-xl font-extrabold text-xs transition cursor-pointer shadow-xs"
-                      >
-                        Ətraflı Mini Dashboard 📊
-                      </button>
+                      <div className="flex items-center justify-end gap-1.5">
+                        {/* KURS / PAKETİ BAŞQASINA TRANSFER DÜYMƏSİ */}
+                        <button
+                          onClick={() => handleOpenCourseTransferModal(client)}
+                          style={fontTextStyle}
+                          className="bg-amber-50 hover:bg-amber-100 text-amber-800 border border-amber-300 px-2.5 py-1.5 rounded-xl font-extrabold text-[11px] transition inline-flex items-center gap-1 cursor-pointer shadow-2xs"
+                          title="Bu müştərinin kursunu/paketini başqa şəxsə transfer et"
+                        >
+                          <ArrowRightLeft size={12} className="text-amber-700" />
+                          <span>Kursu Transfer Et</span>
+                        </button>
+
+                        <button 
+                          onClick={() => handleOpenClientModal(client)}
+                          style={fontTextStyle}
+                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl font-extrabold text-xs transition cursor-pointer shadow-xs"
+                        >
+                          Ətraflı 📊
+                        </button>
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -513,18 +963,30 @@ export default function CRM() {
                   <th style={fontTextStyle} className="p-3 border-r border-slate-200">Hardan Gəldi (Kanal)</th>
                   <th style={fontTextStyle} className="p-3 border-r border-slate-200">Tarix & Saat</th>
                   <th style={fontTextStyle} className="p-3 border-r border-slate-200">Status (Mərhələ)</th>
-                  <th style={fontTextStyle} className="p-3 text-right">Ətraflı & Notlar</th>
+                  <th style={fontTextStyle} className="p-3 text-right">Əməliyyatlar & Transfer</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
-                {filteredLeads.length === 0 ? (
-                  <tr>
-                    <td colSpan="7" style={fontTextStyle} className="text-center py-12 text-slate-400 font-extrabold text-xs">
-                      Süzgəcə uyğun lid tapılmadı.
-                    </td>
-                  </tr>
-                ) : (
-                  filteredLeads.map(lead => (
+                {filteredLeads.map(lead => {
+                  const stageBadgeClasses = {
+                    new: 'bg-blue-50 text-blue-700 border-blue-200',
+                    contacted: 'bg-amber-50 text-amber-800 border-amber-200',
+                    tour: 'bg-purple-50 text-purple-800 border-purple-200',
+                    potential: 'bg-indigo-50 text-indigo-800 border-indigo-200',
+                    won: 'bg-emerald-50 text-emerald-800 border-emerald-200',
+                    lost: 'bg-rose-50 text-rose-800 border-rose-200'
+                  };
+
+                  const stageNames = {
+                    new: '🆕 Yeni Lid',
+                    contacted: '📞 Əlaqə Saxlanıldı',
+                    tour: '🏋️ Tur Təyin Edildi',
+                    potential: '🤔 Düşünür',
+                    won: '✅ Paket Aldı',
+                    lost: '❌ İmtina Etdi'
+                  };
+
+                  return (
                     <tr key={lead.id} className="hover:bg-slate-50 transition">
                       <td style={fontDisplayStyle} className="p-3 border-r border-slate-100 font-black text-slate-900">{lead.id}</td>
                       <td className="p-3 border-r border-slate-100">
@@ -534,40 +996,132 @@ export default function CRM() {
                       <td style={fontDisplayStyle} className="p-3 border-r border-slate-100 font-black text-slate-800">{lead.phone}</td>
                       <td className="p-3 border-r border-slate-100">
                         <span style={fontTextStyle} className={`px-2 py-0.5 rounded-full text-[10px] font-extrabold inline-flex items-center gap-1 ${
-                          lead.channel === 'Instagram' ? 'bg-pink-100 text-pink-800 border border-pink-200' : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          lead.channel === 'Voucher' 
+                            ? 'bg-purple-100 text-purple-800 border border-purple-200' 
+                            : lead.channel === 'Instagram' 
+                            ? 'bg-pink-100 text-pink-800 border border-pink-200' 
+                            : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
                         }`}>
-                          <Instagram size={11} /> {lead.channel}
+                          {lead.channel === 'Voucher' ? <Ticket size={11} /> : <Instagram size={11} />} {lead.channel}
+                          {lead.voucherCode && <strong className="ml-1 text-purple-900 font-black">({lead.voucherCode})</strong>}
                         </span>
                       </td>
                       <td style={fontTextStyle} className="p-3 border-r border-slate-100 text-slate-500 text-[10px] font-bold">{lead.requestTime}</td>
                       <td className="p-3 border-r border-slate-100">
-                        <select 
+                        <button
+                          onClick={() => handleOpenStatusModal(lead)}
                           style={fontTextStyle}
-                          value={lead.stage}
-                          onChange={e => handleStageChange(lead.id, e.target.value)}
-                          className="p-1 border border-slate-200 rounded-lg font-extrabold text-[10px] bg-slate-50 text-slate-800 focus:border-blue-500 outline-none cursor-pointer"
+                          className={`px-2.5 py-1 rounded-xl text-[10px] font-black border flex items-center gap-1 transition cursor-pointer ${stageBadgeClasses[lead.stage] || 'bg-slate-100 text-slate-800'}`}
+                          title="Statusu yeniləmək və not yazmaq üçün klikləyin"
                         >
-                          <option value="new">🆕 Yeni Lid</option>
-                          <option value="contacted">📞 Əlaqə Saxlanıldı</option>
-                          <option value="tour">🏋️ Tur Təyin Edildi</option>
-                          <option value="potential">🤔 Düşünür</option>
-                          <option value="won">✅ Paket Aldı</option>
-                          <option value="lost">❌ İmtina Etdi</option>
-                        </select>
-                      </td>
-                      <td className="p-3 text-right">
-                        <button 
-                          onClick={() => setSelectedLead(lead)}
-                          style={fontTextStyle}
-                          className="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl font-extrabold text-xs transition inline-flex items-center gap-1 cursor-pointer shadow-xs"
-                        >
-                          <MessageSquare size={12} />
-                          <span>Ətraflı Və Notlar ({lead.notes.length})</span>
+                          <span>{stageNames[lead.stage] || lead.stage}</span>
+                          <RefreshCw size={10} className="ml-1 opacity-60" />
                         </button>
                       </td>
+                      <td className="p-3 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            onClick={() => handleOpenTransferModal(lead)}
+                            style={fontTextStyle}
+                            className="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1.5 rounded-xl font-extrabold text-[11px] transition inline-flex items-center gap-1 cursor-pointer shadow-xs"
+                            title="Bu lidi Müştəri Bazasına çevir"
+                          >
+                            <UserPlus size={12} />
+                            <span>Müştəriyə Çevir</span>
+                          </button>
+
+                          <button 
+                            onClick={() => setSelectedLead(lead)}
+                            style={fontTextStyle}
+                            className="bg-blue-600 hover:bg-blue-700 text-white px-2.5 py-1.5 rounded-xl font-extrabold text-[11px] transition inline-flex items-center gap-1 cursor-pointer shadow-xs"
+                          >
+                            <MessageSquare size={12} />
+                            <span>Notlar ({lead.notes.length})</span>
+                          </button>
+                        </div>
+                      </td>
                     </tr>
-                  ))
-                )}
+                  );
+                })}
+              </tbody>
+            </table>
+          </div>
+        )}
+
+        {/* VOUCHERS TABLE */}
+        {activeTab === 'vouchers' && (
+          <div className="overflow-auto h-full">
+            <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
+              <thead className="sticky top-0 z-10 bg-slate-100 text-slate-800 border-b border-slate-200">
+                <tr className="uppercase font-black text-[10px] tracking-wider text-slate-600">
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Vauçer Kodu & ID</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Təyin Olunan Paket / Xidmət</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Müştəri / Sahibi</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Mənbə & Tərtib Edən</th>
+                  <th style={fontTextStyle} className="p-3 border-r border-slate-200">Endirim & Status</th>
+                  <th style={fontTextStyle} className="p-3 text-right">Verilmə Və Bitiş Tarixi</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-slate-100 font-medium text-slate-800">
+                {filteredVouchers.map(v => (
+                  <tr key={v.id} className="hover:bg-slate-50 transition">
+                    <td className="p-3 border-r border-slate-100">
+                      <div className="flex items-center gap-2">
+                        <span style={fontDisplayStyle} className="font-black text-purple-700 bg-purple-50 px-2 py-1 rounded-lg border border-purple-200 text-xs">
+                          {v.code}
+                        </span>
+                        <span style={fontDisplayStyle} className="text-[10px] text-slate-400">{v.id}</span>
+                      </div>
+                      <span style={fontTextStyle} className="text-[10px] text-slate-500 block mt-0.5 font-bold">{v.type}</span>
+                    </td>
+
+                    <td className="p-3 border-r border-slate-100">
+                      <span style={fontTextStyle} className="font-extrabold text-slate-900 block">{v.package}</span>
+                      <span style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">{v.notes || 'Qeyd yoxdur'}</span>
+                    </td>
+
+                    <td className="p-3 border-r border-slate-100">
+                      <span style={fontTextStyle} className="font-extrabold text-slate-900 block">{v.clientName}</span>
+                      <span style={fontDisplayStyle} className="text-[10px] text-slate-500">{v.clientPhone}</span>
+                    </td>
+
+                    <td className="p-3 border-r border-slate-100">
+                      <span style={fontTextStyle} className="font-extrabold text-slate-800 flex items-center gap-1 text-[11px]">
+                        <Building2 size={12} className="text-blue-600" /> {v.partnerCompany || 'Daxili Aksiyalar'}
+                      </span>
+                      <span style={fontTextStyle} className="text-[10px] text-slate-400 font-bold block">Verən: {v.issuer}</span>
+                    </td>
+
+                    <td className="p-3 border-r border-slate-100">
+                      <div className="flex items-center gap-1.5">
+                        <span style={fontDisplayStyle} className="bg-slate-100 text-slate-900 font-black px-2 py-0.5 rounded text-[10px]">
+                          {v.discountVal}
+                        </span>
+                        
+                        {v.status === 'active' && (
+                          <span style={fontTextStyle} className="bg-emerald-100 text-emerald-800 border border-emerald-200 px-2 py-0.5 rounded-md font-extrabold text-[10px]">
+                            Aktiv (Hazır)
+                          </span>
+                        )}
+                        {v.status === 'used' && (
+                          <span style={fontTextStyle} className="bg-slate-100 text-slate-600 border border-slate-200 px-2 py-0.5 rounded-md font-extrabold text-[10px]">
+                            İstifadə Edilib
+                          </span>
+                        )}
+                        {v.status === 'expired' && (
+                          <span style={fontTextStyle} className="bg-rose-100 text-rose-800 border border-rose-200 px-2 py-0.5 rounded-md font-extrabold text-[10px]">
+                            Vaxtı Bitib
+                          </span>
+                        )}
+                      </div>
+                    </td>
+
+                    <td className="p-3 text-right">
+                      <span style={fontTextStyle} className="font-extrabold text-slate-700 block text-[11px]">{v.issueDate} — {v.expiryDate}</span>
+                      <span style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">Bitiş Müddəti</span>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
@@ -575,7 +1129,7 @@ export default function CRM() {
 
       </div>
 
-      {/* 4. CLIENT MODAL & INFO EDIT MODE */}
+      {/* 4. CLIENT MODAL & FULL MINI DASHBOARD */}
       {selectedClient && (
         <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-2 sm:p-4 m-0">
           <div className="bg-white rounded-3xl shadow-2xl max-w-5xl w-full p-6 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150 max-h-[94vh] overflow-y-auto relative">
@@ -587,6 +1141,7 @@ export default function CRM() {
               <X size={20} />
             </button>
 
+            {/* PROFILE HEADER */}
             <div className="flex flex-col items-center text-center border-b border-slate-100 pb-4 relative pt-2">
               <div className="relative group mb-2">
                 <img 
@@ -604,13 +1159,25 @@ export default function CRM() {
               </div>
 
               <div className="space-y-1">
-                <div className="flex items-center justify-center gap-2">
+                <div className="flex items-center justify-center gap-2 flex-wrap">
                   <span style={fontDisplayStyle} className="text-xs font-black text-slate-400">{selectedClient.id}</span>
                   <span style={fontTextStyle} className={`px-2.5 py-0.5 rounded-md font-extrabold text-[10px] ${
                     selectedClient.status === 'active' ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800'
                   }`}>
                     {selectedClient.statusText}
                   </span>
+
+                  {selectedClient.registrationType === 'Corporate' && (
+                    <span style={fontTextStyle} className="bg-blue-100 text-blue-800 border border-blue-200 px-2.5 py-0.5 rounded-md font-black text-[10px] flex items-center gap-1">
+                      <Building2 size={12} /> Korporativ: {selectedClient.companyName || 'Təyin Olunmayıb'}
+                    </span>
+                  )}
+
+                  {selectedClient.registrationType === 'Voucher' && (
+                    <span style={fontTextStyle} className="bg-purple-100 text-purple-800 border border-purple-200 px-2.5 py-0.5 rounded-md font-black text-[10px] flex items-center gap-1">
+                      <Ticket size={12} /> Voucher: {selectedClient.voucherCode || 'Aktiv'}
+                    </span>
+                  )}
                 </div>
 
                 <div className="flex items-center justify-center gap-2 mt-1">
@@ -656,6 +1223,7 @@ export default function CRM() {
               </div>
             )}
 
+            {/* EDIT MODE OR FULL DASHBOARD */}
             {isEditProfileMode ? (
               <form onSubmit={handleSaveProfile} className="bg-slate-50 p-4 rounded-3xl border border-slate-200 space-y-4 animate-in fade-in duration-200">
                 <div className="flex items-center justify-between border-b border-slate-200 pb-2">
@@ -745,13 +1313,42 @@ export default function CRM() {
                   </div>
 
                   <div>
-                    <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Şəhər / Ünvan:</label>
-                    <input 
+                    <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Müştəri Kateqoriyası:</label>
+                    <select 
                       style={fontTextStyle}
+                      value={editFormData.registrationType || 'Standard'} 
+                      onChange={e => setEditFormData({ ...editFormData, registrationType: e.target.value })}
+                      className="w-full p-2 border border-slate-200 rounded-xl bg-white font-extrabold text-slate-800 outline-none"
+                    >
+                      <option value="Standard">Standart Alış</option>
+                      <option value="Voucher">🎟️ Voucher / Kupon</option>
+                      <option value="Corporate">🏢 Korporativ Müştəri</option>
+                    </select>
+                  </div>
+
+                  {editFormData.registrationType === 'Corporate' && (
+                    <div>
+                      <label style={fontTextStyle} className="block text-blue-700 font-extrabold mb-1">Şirkət Adı (Korporativ):</label>
+                      <input 
+                        style={fontTextStyle}
+                        type="text" 
+                        placeholder="Məs: SOCAR, Pasha Holding..."
+                        value={editFormData.companyName || ''} 
+                        onChange={e => setEditFormData({ ...editFormData, companyName: e.target.value })}
+                        className="w-full p-2 border border-blue-200 bg-blue-50/40 rounded-xl font-extrabold text-slate-800 outline-none focus:border-blue-500"
+                      />
+                    </div>
+                  )}
+
+                  <div>
+                    <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Voucher Kodu (əgər varsa):</label>
+                    <input 
+                      style={fontDisplayStyle}
                       type="text" 
-                      value={editFormData.city || ''} 
-                      onChange={e => setEditFormData({ ...editFormData, city: e.target.value })}
-                      className="w-full p-2 border border-slate-200 rounded-xl bg-white font-extrabold text-slate-800 outline-none focus:border-blue-500"
+                      placeholder="Məs: VCH-2026-X89"
+                      value={editFormData.voucherCode || ''} 
+                      onChange={e => setEditFormData({ ...editFormData, voucherCode: e.target.value.toUpperCase() })}
+                      className="w-full p-2 border border-slate-200 rounded-xl bg-white font-black text-slate-800 outline-none focus:border-blue-500"
                     />
                   </div>
 
@@ -763,17 +1360,6 @@ export default function CRM() {
                       value={editFormData.phone || ''} 
                       onChange={e => setEditFormData({ ...editFormData, phone: e.target.value })}
                       className="w-full p-2 border border-slate-200 rounded-xl bg-white font-black text-slate-800 outline-none focus:border-blue-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">E-poçt Ünvanı:</label>
-                    <input 
-                      style={fontTextStyle}
-                      type="email" 
-                      value={editFormData.email || ''} 
-                      onChange={e => setEditFormData({ ...editFormData, email: e.target.value })}
-                      className="w-full p-2 border border-slate-200 rounded-xl bg-white font-extrabold text-slate-800 outline-none focus:border-blue-500"
                     />
                   </div>
                 </div>
@@ -797,162 +1383,161 @@ export default function CRM() {
                 </div>
               </form>
             ) : (
-              <>
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
 
-                  <div className="space-y-3">
-                    <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
-                      <div className="flex justify-between items-center border-b border-slate-200/80 pb-2">
-                        <span style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
-                          <ShieldCheck size={16} className="text-emerald-600" /> Cari Paket: <strong className="text-slate-900">{selectedClient.membershipPackage}</strong>
-                        </span>
-                        <span style={fontTextStyle} className="text-slate-500 text-[10px] font-extrabold">{selectedClient.startDate} — {selectedClient.endDate}</span>
-                      </div>
+                <div className="space-y-3">
+                  {/* PAKET VƏ İMTİYAZLAR */}
+                  <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                    <div className="flex justify-between items-center border-b border-slate-200/80 pb-2">
+                      <span style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                        <ShieldCheck size={16} className="text-emerald-600" /> Cari Paket / Kurs: <strong className="text-slate-900">{selectedClient.membershipPackage}</strong>
+                      </span>
 
-                      <div>
-                        <span style={fontTextStyle} className="text-[10px] font-extrabold text-slate-400 uppercase block mb-1">Paketin İmtiyazları Və Hüquqları:</span>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-                          {selectedClient.privileges.map((priv, idx) => (
-                            <div key={idx} style={fontTextStyle} className="bg-white p-2 rounded-xl border border-slate-200/80 font-extrabold text-slate-800 flex items-center gap-1.5 text-[10px]">
-                              <Check size={12} className="text-emerald-600 shrink-0" />
-                              <span>{priv}</span>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
+                      <button
+                        onClick={() => handleOpenCourseTransferModal(selectedClient)}
+                        style={fontTextStyle}
+                        className="bg-amber-100 hover:bg-amber-200 text-amber-900 border border-amber-300 px-2.5 py-1 rounded-xl font-extrabold text-[10px] flex items-center gap-1 cursor-pointer transition"
+                      >
+                        <ArrowRightLeft size={11} /> Kursu Transfer Et
+                      </button>
                     </div>
 
-                    <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
-                      <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
-                        <Dumbbell size={16} className="text-purple-600" /> Təlimçi (PT) Balansı Və Seanslar
-                      </h4>
-
-                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-                        <div className="bg-white p-2 rounded-xl border border-slate-200">
-                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Məşqçi</span>
-                          <p style={fontTextStyle} className="font-extrabold text-slate-900 text-xs truncate">{selectedClient.ptBalance.trainerName}</p>
-                        </div>
-                        <div className="bg-white p-2 rounded-xl border border-slate-200">
-                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Alınan Seans</span>
-                          <p style={fontDisplayStyle} className="font-black text-slate-900 text-xs">{selectedClient.ptBalance.totalSessions} Seans</p>
-                        </div>
-                        <div className="bg-white p-2 rounded-xl border border-slate-200">
-                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Qalan Seans</span>
-                          <p style={fontDisplayStyle} className="font-black text-emerald-600 text-xs">{selectedClient.ptBalance.remainingSessions} Seans</p>
-                        </div>
-                        <div className="bg-white p-2 rounded-xl border border-slate-200">
-                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">PT Depoziti</span>
-                          <div className="flex justify-center items-baseline gap-0.5">
-                            <span style={fontDisplayStyle} className="font-black text-slate-900 text-xs">{selectedClient.ptBalance.depositBalanceVal}</span>
-                            <span style={fontTextStyle} className="font-extrabold text-slate-900 text-[10px]">{selectedClient.ptBalance.depositBalanceUnit}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="bg-slate-100 p-3 rounded-2xl border border-slate-200 flex justify-between items-center">
-                      <div>
-                        <span style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
-                          <Snowflake size={15} className="text-blue-600" /> Paket Dondurulması Və Avto-Aktivasiya
-                        </span>
-                        <p style={fontTextStyle} className="text-[10px] text-slate-500 mt-0.5 font-bold">Müddət dolduqda müştəri avtomatik aktivləşəcəkdir.</p>
-                      </div>
-
-                      <div className="flex items-center gap-2">
-                        <input 
-                          style={fontDisplayStyle}
-                          type="number" 
-                          min="1" 
-                          max="30"
-                          value={freezeDaysInput}
-                          onChange={e => setFreezeDaysInput(e.target.value)}
-                          className="w-16 p-1.5 border border-slate-200 rounded-xl bg-white font-black text-xs text-center outline-none"
-                        />
-                        <button 
-                          style={fontTextStyle}
-                          className="px-3 py-1.5 rounded-xl font-extrabold text-xs transition cursor-pointer bg-blue-600 text-white hover:bg-blue-700 shadow-xs"
-                        >
-                          {freezeDaysInput} Gün Dondur
-                        </button>
-                      </div>
-                    </div>
-
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2">
-                      <div className="flex justify-between items-center border-b border-slate-200 pb-2">
-                        <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
-                          <Receipt size={16} className="text-emerald-700" /> Ətraflı Kassa & Billing Tarixçəsi
-                        </h4>
-                        <div className="bg-white border border-slate-200 px-2 py-0.5 rounded-lg flex items-baseline gap-1">
-                          <span style={fontTextStyle} className="text-[10px] font-extrabold text-slate-500">Cəm:</span>
-                          <span style={fontDisplayStyle} className="font-black text-slate-900 text-[11px]">{selectedClient.totalSpentVal}</span>
-                          <span style={fontTextStyle} className="font-extrabold text-slate-900 text-[10px]">{selectedClient.totalSpentUnit}</span>
-                        </div>
-                      </div>
-
-                      <div className="space-y-2 max-h-72 overflow-y-auto pr-1">
-                        {selectedClient.transactions.map((tr) => (
-                          <div key={tr.id} className="bg-white p-2.5 rounded-xl border border-slate-200/90 text-[11px] space-y-1 shadow-2xs">
-                            <div className="flex justify-between items-start">
-                              <div>
-                                <span style={fontTextStyle} className="font-extrabold text-slate-900 block">{tr.item}</span>
-                                <span style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">{tr.id} • {tr.location} ({tr.type})</span>
-                              </div>
-                              <div className="bg-slate-100 px-2 py-0.5 rounded-md flex items-baseline gap-0.5">
-                                <span style={fontDisplayStyle} className="font-black text-slate-900 text-xs">{tr.amountVal}</span>
-                                <span style={fontTextStyle} className="font-extrabold text-slate-900 text-[10px]">{tr.amountUnit}</span>
-                              </div>
-                            </div>
-
-                            <div className="pt-1 border-t border-slate-100 flex justify-between items-center text-[10px] text-slate-500">
-                              <span style={fontTextStyle} className="flex items-center gap-1 font-extrabold text-slate-700">
-                                <User size={11} className="text-slate-400" /> Əməliyyatçı: <strong className="text-slate-900">{tr.processedBy}</strong>
-                              </span>
-                              <span style={fontTextStyle} className="text-slate-400 font-bold">{tr.date} ({tr.time})</span>
-                            </div>
+                    <div>
+                      <span style={fontTextStyle} className="text-[10px] font-extrabold text-slate-400 uppercase block mb-1">Paketin İmtiyazları Və Hüquqları:</span>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+                        {selectedClient.privileges.map((priv, idx) => (
+                          <div key={idx} style={fontTextStyle} className="bg-white p-2 rounded-xl border border-slate-200/80 font-extrabold text-slate-800 flex items-center gap-1.5 text-[10px]">
+                            <Check size={12} className="text-emerald-600 shrink-0" />
+                            <span>{priv}</span>
                           </div>
                         ))}
                       </div>
                     </div>
                   </div>
 
-                </div>
-
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100">
-                  <div className="space-y-1">
-                    <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-[11px] flex items-center gap-1">
-                      <Key size={13} /> Keçid Və Parkinq Tarixçəsi
-                    </h4>
-                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-2 max-h-28 overflow-y-auto space-y-1">
-                      {selectedClient.accessHistory.map((acc, idx) => (
-                        <div key={idx} className="bg-white p-1.5 rounded-lg border border-slate-100 flex justify-between items-center text-[10px]">
-                          <span style={fontTextStyle} className="font-extrabold text-slate-800">{acc.detail}</span>
-                          <span style={fontTextStyle} className="text-slate-400 font-bold">{acc.date} ({acc.time})</span>
-                        </div>
-                      ))}
+                  {/* 🗝️ ŞƏXSİ ŞKAF (LOCKER RENTAL) MƏLUMAT VƏ ARENDA BLOKU */}
+                  <div className="bg-gradient-to-r from-slate-50 to-emerald-50/50 p-3.5 rounded-2xl border border-emerald-200/80 space-y-2">
+                    <div className="flex justify-between items-center border-b border-slate-200/80 pb-2">
+                      <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                        <Lock size={16} className="text-emerald-600" /> Şəxsi Şkaf (Locker) Arendası Məlumatları
+                      </h4>
+                      <button
+                        onClick={() => handleOpenLockerModal(selectedClient)}
+                        style={fontTextStyle}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white px-2.5 py-1 rounded-xl font-extrabold text-[10px] flex items-center gap-1 cursor-pointer transition shadow-xs"
+                      >
+                        <Edit3 size={11} /> {selectedClient.lockerRental?.hasLocker ? 'Arendanı Yenilə' : '+ Şkaf Arenda Et'}
+                      </button>
                     </div>
+
+                    {selectedClient.lockerRental && selectedClient.lockerRental.hasLocker ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                        <div className="bg-white p-2 rounded-xl border border-slate-200">
+                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Şkaf № Və Sektor</span>
+                          <p style={fontDisplayStyle} className="font-black text-emerald-700 text-xs">{selectedClient.lockerRental.lockerNumber}</p>
+                          <span style={fontTextStyle} className="text-[9px] text-slate-500 font-bold block">{selectedClient.lockerRental.sector}</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl border border-slate-200">
+                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Aylıq Arenda Haqqı</span>
+                          <p style={fontDisplayStyle} className="font-black text-slate-900 text-xs">{selectedClient.lockerRental.monthlyFeeVal} AZN / ay</p>
+                          <span style={fontTextStyle} className="text-[9px] text-emerald-600 font-extrabold block">Deposit Ödənilib</span>
+                        </div>
+                        <div className="bg-white p-2 rounded-xl border border-slate-200 col-span-2 sm:col-span-1">
+                          <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Arenda Müddəti</span>
+                          <p style={fontTextStyle} className="font-extrabold text-slate-800 text-[10px] mt-0.5">{selectedClient.lockerRental.startDate} — {selectedClient.lockerRental.endDate}</p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="bg-white p-3 rounded-xl border border-dashed border-slate-300 text-center space-y-1">
+                        <p style={fontTextStyle} className="text-slate-500 font-bold text-xs">Müştərinin aktiv şəxsi şkaf (Locker) arendası mövcud deyil.</p>
+                        <button 
+                          onClick={() => handleOpenLockerModal(selectedClient)}
+                          style={fontTextStyle}
+                          className="text-blue-600 hover:underline font-extrabold text-xs inline-flex items-center gap-1 cursor-pointer"
+                        >
+                          <Lock size={12} /> İndi Müştəriyə Şəxsi Şkaf Təyin Et
+                        </button>
+                      </div>
+                    )}
                   </div>
 
-                  <div className="space-y-1">
-                    <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-[11px] flex items-center gap-1">
-                      <Calendar size={13} /> Görüşlər Və Randevular
+                  {/* TƏLİMÇİ PT BALANSI */}
+                  <div className="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                    <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                      <Dumbbell size={16} className="text-purple-600" /> Təlimçi (PT) Balansı Və Seanslar
                     </h4>
-                    <div className="bg-slate-50 border border-slate-200 rounded-xl p-2 max-h-28 overflow-y-auto space-y-1">
-                      {selectedClient.appointments.map((app, idx) => (
-                        <div key={idx} className="bg-white p-1.5 rounded-lg border border-slate-100 flex justify-between items-center text-[10px]">
-                          <div>
-                            <span style={fontTextStyle} className="font-extrabold text-slate-900 block">{app.service}</span>
-                            <span style={fontTextStyle} className="text-[9px] text-slate-400 font-bold">{app.master}</span>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                      <div className="bg-white p-2 rounded-xl border border-slate-200">
+                        <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Məşqçi</span>
+                        <p style={fontTextStyle} className="font-extrabold text-slate-900 text-xs truncate">{selectedClient.ptBalance.trainerName}</p>
+                      </div>
+                      <div className="bg-white p-2 rounded-xl border border-slate-200">
+                        <span style={fontTextStyle} className="text-[9px] text-slate-400 font-extrabold uppercase block">Qalan Seans</span>
+                        <p style={fontDisplayStyle} className="font-black text-emerald-600 text-xs">{selectedClient.ptBalance.remainingSessions} Seans</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* RIGHT COLUMN */}
+                <div className="space-y-3">
+                  
+                  {/* 🚪 GİRİŞ VƏ ÇIXIŞ QAPILARI TARİXÇƏSİ BLOKU (TƏZƏ ƏLAVƏ EDİLDİ) */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2">
+                    <div className="flex justify-between items-center border-b border-slate-200 pb-2">
+                      <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                        <LogIn size={16} className="text-blue-600" /> Qapı və Turniket Keçid Tarixçəsi
+                      </h4>
+                      <span style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">Keçid Giriş/Çıxış</span>
+                    </div>
+
+                    <div className="space-y-1.5 max-h-48 overflow-y-auto pr-1">
+                      {selectedClient.gateLogs && selectedClient.gateLogs.length > 0 ? (
+                        selectedClient.gateLogs.map((log) => (
+                          <div key={log.id} className="bg-white p-2 rounded-xl border border-slate-200 flex items-center justify-between text-[10px]">
+                            <div className="flex items-center gap-2">
+                              {log.actionType === 'entry' ? (
+                                <span className="bg-emerald-100 text-emerald-800 p-1.5 rounded-lg font-black flex items-center gap-1 text-[9px]">
+                                  <LogIn size={12} className="text-emerald-600" /> GİRİŞ
+                                </span>
+                              ) : (
+                                <span className="bg-amber-100 text-amber-800 p-1.5 rounded-lg font-black flex items-center gap-1 text-[9px]">
+                                  <LogOut size={12} className="text-amber-600" /> ÇIXIŞ
+                                </span>
+                              )}
+                              <div>
+                                <span style={fontTextStyle} className="font-extrabold text-slate-900 block">{log.gateName}</span>
+                                <span style={fontTextStyle} className="text-[9px] text-slate-400 font-bold">{log.date} — {log.time}</span>
+                              </div>
+                            </div>
+                            <span style={fontTextStyle} className="bg-slate-50 text-slate-600 px-2 py-0.5 rounded border border-slate-200 font-bold text-[9px]">
+                              {log.status}
+                            </span>
                           </div>
-                          <span style={fontTextStyle} className="text-slate-400 font-bold">{app.date} ({app.time})</span>
+                        ))
+                      ) : (
+                        <p style={fontTextStyle} className="text-[10px] text-slate-400 italic text-center py-2">Keçid tarixçəsi tapılmadı</p>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* KASSA & BILLING */}
+                  <div className="bg-slate-50 border border-slate-200 rounded-2xl p-3.5 space-y-2">
+                    <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs flex items-center gap-1.5">
+                      <Receipt size={16} className="text-emerald-700" /> Ətraflı Kassa & Billing Tarixçəsi
+                    </h4>
+                    <div className="space-y-2 max-h-40 overflow-y-auto pr-1">
+                      {selectedClient.transactions.map((tr) => (
+                        <div key={tr.id} className="bg-white p-2 rounded-xl border border-slate-200 text-[10px]">
+                          <span style={fontTextStyle} className="font-extrabold text-slate-900 block">{tr.item}</span>
+                          <span style={fontTextStyle} className="text-[9px] text-slate-400">{tr.date} • {tr.amountVal} {tr.amountUnit}</span>
                         </div>
                       ))}
                     </div>
                   </div>
                 </div>
-              </>
+
+              </div>
             )}
 
             <div className="flex justify-end pt-2 border-t border-slate-100">
@@ -969,7 +1554,374 @@ export default function CRM() {
         </div>
       )}
 
-      {/* 5. LEADS DETAILED MODAL */}
+      {/* 5. MODAL: KURSU BAŞQASINA TRANSFER ETMƏK */}
+      {courseTransferModalClient && (
+        <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4 m-0">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-amber-100 text-amber-800 rounded-xl flex items-center justify-center font-black">
+                  <ArrowRightLeft size={18} />
+                </div>
+                <div>
+                  <h3 style={fontTextStyle} className="font-extrabold text-slate-900 text-sm">Kursu / Paketi Başqasına Transfer Et</h3>
+                  <p style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">Aktiv paketi başqa şəxsin adına keçirin</p>
+                </div>
+              </div>
+              <button onClick={() => setCourseTransferModalClient(null)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleExecuteCourseTransfer} className="space-y-3">
+              <div className="bg-amber-50/70 p-3 rounded-2xl border border-amber-200 text-[11px] space-y-1">
+                <div className="flex justify-between">
+                  <span style={fontTextStyle} className="text-amber-900 font-extrabold">Ötürən Müştəri:</span>
+                  <strong style={fontTextStyle} className="text-slate-900 font-black">{courseTransferModalClient.name}</strong>
+                </div>
+                <div className="flex justify-between">
+                  <span style={fontTextStyle} className="text-amber-900 font-extrabold">Transfer Olunacaq Paket:</span>
+                  <strong style={fontTextStyle} className="text-slate-900 font-black">{courseTransferModalClient.membershipPackage}</strong>
+                </div>
+              </div>
+
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Qəbul Edən Şəxsin Adı Və Soyadı:</label>
+                <input 
+                  style={fontTextStyle}
+                  type="text" 
+                  placeholder="Məs: Əli Nəcəfov"
+                  value={courseTransferData.targetClientName}
+                  onChange={e => setCourseTransferData({ ...courseTransferData, targetClientName: e.target.value })}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none focus:bg-white"
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Qəbul Edən Şəxsin Telefon Nömrəsi:</label>
+                <input 
+                  style={fontDisplayStyle}
+                  type="text" 
+                  placeholder="+994 50 000 00 00"
+                  value={courseTransferData.targetClientPhone}
+                  onChange={e => setCourseTransferData({ ...courseTransferData, targetClientPhone: e.target.value })}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-black text-slate-900 outline-none focus:bg-white"
+                  required
+                />
+              </div>
+
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Transfer Səbəbi / Qeyd:</label>
+                <textarea 
+                  style={fontTextStyle}
+                  rows="2"
+                  placeholder="Məs: Şəxsi səbəblərlə bağlı paketini rəfiqəsinə hədiyyə etdi..."
+                  value={courseTransferData.transferReason}
+                  onChange={e => setCourseTransferData({ ...courseTransferData, transferReason: e.target.value })}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none focus:bg-white"
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setCourseTransferModalClient(null)} 
+                  style={fontTextStyle}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 font-extrabold rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                >
+                  Ləğv Et
+                </button>
+                <button 
+                  type="submit" 
+                  style={fontTextStyle}
+                  className="px-5 py-2 bg-amber-600 hover:bg-amber-700 text-white font-extrabold rounded-xl transition cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <ArrowRightLeft size={14} /> Kursu Başqasına Transfer Et
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 6. MODAL: LOCKER (ŞƏXSİ ŞKAF) ARENDASI YAZILMASI VƏ MODALI */}
+      {lockerModalClient && (
+        <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4 m-0">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-emerald-100 text-emerald-800 rounded-xl flex items-center justify-center font-black">
+                  <Lock size={18} />
+                </div>
+                <div>
+                  <h3 style={fontTextStyle} className="font-extrabold text-slate-900 text-sm">Şəxsi Şkaf (Locker) Arendası</h3>
+                  <p style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">{lockerModalClient.name} üçün şkaf təyin edin</p>
+                </div>
+              </div>
+              <button onClick={() => setLockerModalClient(null)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveLockerRental} className="space-y-3">
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Şkaf Nömrəsi (№):</label>
+                  <input 
+                    style={fontDisplayStyle}
+                    type="text" 
+                    placeholder="Məs: A-42 və ya L-105"
+                    value={lockerFormData.lockerNumber}
+                    onChange={e => setLockerFormData({ ...lockerFormData, lockerNumber: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-black text-slate-900 outline-none focus:bg-white"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Şkaf Sektoru / Zonu:</label>
+                  <select 
+                    style={fontTextStyle}
+                    value={lockerFormData.sector}
+                    onChange={e => setLockerFormData({ ...lockerFormData, sector: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none"
+                  >
+                    <option value="VIP Xanımlar Zonu">VIP Xanımlar Zonu</option>
+                    <option value="VIP Bəylər Zonu">VIP Bəylər Zonu</option>
+                    <option value="Ümumi Zalı Şkafları">Ümumi Zal Şkafları</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2 text-xs">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Başlanğıc Tarixi:</label>
+                  <input 
+                    style={fontTextStyle}
+                    type="date" 
+                    value={lockerFormData.startDate}
+                    onChange={e => setLockerFormData({ ...lockerFormData, startDate: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Bitiş Tarixi:</label>
+                  <input 
+                    style={fontTextStyle}
+                    type="date" 
+                    value={lockerFormData.endDate}
+                    onChange={e => setLockerFormData({ ...lockerFormData, endDate: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Aylıq Arenda Qiyməti (AZN):</label>
+                <input 
+                  style={fontDisplayStyle}
+                  type="text" 
+                  placeholder="40.00"
+                  value={lockerFormData.monthlyFeeVal}
+                  onChange={e => setLockerFormData({ ...lockerFormData, monthlyFeeVal: e.target.value })}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-black text-slate-900 outline-none focus:bg-white"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setLockerModalClient(null)} 
+                  style={fontTextStyle}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 font-extrabold rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                >
+                  Ləğv Et
+                </button>
+                <button 
+                  type="submit" 
+                  style={fontTextStyle}
+                  className="px-5 py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl transition cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <Lock size={14} /> Şkaf Arendasını Təsdiqlə
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 7. MODAL: STATUSU YENİLƏ VƏ MƏCBURİ NOT POST ET */}
+      {statusChangeModalLead && (
+        <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4 m-0">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-5 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-2.5">
+              <div>
+                <span style={fontDisplayStyle} className="text-[10px] font-black text-slate-400">{statusChangeModalLead.id}</span>
+                <h3 style={fontTextStyle} className="font-extrabold text-slate-900 text-sm">Status Yeniləmə Və Not Post Et</h3>
+              </div>
+              <button onClick={() => setStatusChangeModalLead(null)} className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveStatusWithNote} className="space-y-3">
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Yeni Status (Mərhələ):</label>
+                <select 
+                  style={fontTextStyle}
+                  value={newStageInput}
+                  onChange={e => setNewStageInput(e.target.value)}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none focus:bg-white"
+                >
+                  <option value="new">🆕 Yeni Lid</option>
+                  <option value="contacted">📞 Əlaqə Saxlanıldı</option>
+                  <option value="tour">🏋️ Tur Təyin Edildi</option>
+                  <option value="potential">🤔 Düşünür</option>
+                  <option value="won">✅ Paket Aldı</option>
+                  <option value="lost">❌ İmtina Etdi</option>
+                </select>
+              </div>
+
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Məcburi Not / Şərh (Comment):</label>
+                <textarea 
+                  style={fontTextStyle}
+                  rows="3"
+                  placeholder="Məs: Kluba sınaq turuna gəldi, paket qiyməti ilə razılaşdı..."
+                  value={stageNoteInput}
+                  onChange={e => setStageNoteInput(e.target.value)}
+                  className="w-full p-2.5 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none focus:bg-white"
+                  required
+                />
+              </div>
+
+              <div className="flex justify-end gap-2 pt-2 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setStatusChangeModalLead(null)} 
+                  style={fontTextStyle}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 font-extrabold rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                >
+                  Ləğv Et
+                </button>
+                <button 
+                  type="submit" 
+                  style={fontTextStyle}
+                  className="px-5 py-2 bg-blue-600 text-white font-extrabold rounded-xl hover:bg-blue-700 transition cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <Check size={14} /> Statusu Yenilə Və Notu Post Et
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 8. MODAL: LİDDƏN MÜŞTƏRİ BAZASINA TRANSFER */}
+      {transferModalLead && (
+        <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4 m-0">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full p-6 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150 max-h-[92vh] overflow-y-auto">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-black">
+                  <UserPlus size={18} />
+                </div>
+                <div>
+                  <h3 style={fontTextStyle} className="font-extrabold text-slate-900 text-sm">Lidi Müştəri Bazasına Transfer Et</h3>
+                  <p style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">Eksik məlumatları tamamlayaraq yeni rəsmi müştəri profil yaradın</p>
+                </div>
+              </div>
+              <button onClick={() => setTransferModalLead(null)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCompleteTransferToClient} className="space-y-3">
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Ad Soyad:</label>
+                  <input 
+                    style={fontTextStyle}
+                    type="text" 
+                    value={transferFormData.name}
+                    onChange={e => setTransferFormData({ ...transferFormData, name: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-extrabold text-slate-900 outline-none"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Telefon Nömrəsi:</label>
+                  <input 
+                    style={fontDisplayStyle}
+                    type="text" 
+                    value={transferFormData.phone}
+                    onChange={e => setTransferFormData({ ...transferFormData, phone: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-black text-slate-900 outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Müştəri Kateqoriyası:</label>
+                  <select 
+                    style={fontTextStyle}
+                    value={transferFormData.registrationType}
+                    onChange={e => setTransferFormData({ ...transferFormData, registrationType: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-white font-extrabold text-slate-900 outline-none"
+                  >
+                    <option value="Standard">Standart Alış</option>
+                    <option value="Voucher">🎟️ Voucher / Kupon</option>
+                    <option value="Corporate">🏢 Korporativ Müştəri</option>
+                  </select>
+                </div>
+
+                {transferFormData.registrationType === 'Corporate' && (
+                  <div>
+                    <label style={fontTextStyle} className="block text-blue-700 font-extrabold mb-1">Şirkət Adı (Korporativ):</label>
+                    <input 
+                      style={fontTextStyle}
+                      type="text" 
+                      placeholder="Məs: Pasha Holding, SOCAR..."
+                      value={transferFormData.companyName}
+                      onChange={e => setTransferFormData({ ...transferFormData, companyName: e.target.value })}
+                      className="w-full p-2 border border-blue-200 bg-blue-50/50 rounded-xl font-extrabold text-slate-900 outline-none focus:bg-white"
+                      required
+                    />
+                  </div>
+                )}
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setTransferModalLead(null)} 
+                  style={fontTextStyle}
+                  className="px-4 py-2 bg-slate-100 text-slate-700 font-extrabold rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                >
+                  Ləğv Et
+                </button>
+                <button 
+                  type="submit" 
+                  style={fontTextStyle}
+                  className="px-5 py-2 bg-emerald-600 text-white font-extrabold rounded-xl hover:bg-emerald-700 transition cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <UserPlus size={14} /> Müştəri Bazasına Transfer Et
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* 9. LEADS DETAILED MODAL */}
       {selectedLead && (
         <div className="fixed inset-0 w-screen h-screen bg-slate-900/50 backdrop-blur-xs z-[9999] flex items-center justify-center p-2 m-0">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-5 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150">
@@ -983,60 +1935,18 @@ export default function CRM() {
               </button>
             </div>
 
-            <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 grid grid-cols-2 gap-2 text-[11px]">
-              <div>
-                <span style={fontTextStyle} className="text-slate-400 font-extrabold block text-[9px] uppercase">Telefon</span>
-                <span style={fontDisplayStyle} className="font-black text-slate-900">{selectedLead.phone}</span>
-              </div>
-              <div>
-                <span style={fontTextStyle} className="text-slate-400 font-extrabold block text-[9px] uppercase">Gəldiyi Kanal</span>
-                <span style={fontTextStyle} className="font-extrabold text-slate-800">{selectedLead.channel}</span>
-              </div>
-              <div>
-                <span style={fontTextStyle} className="text-slate-400 font-extrabold block text-[9px] uppercase">Maraqlandığı Xidmət</span>
-                <span style={fontTextStyle} className="font-extrabold text-slate-900">{selectedLead.interest}</span>
-              </div>
-              <div>
-                <span style={fontTextStyle} className="text-slate-400 font-extrabold block text-[9px] uppercase">Təyin Olunub</span>
-                <span style={fontTextStyle} className="font-extrabold text-slate-800">{selectedLead.assignedTo}</span>
-              </div>
-            </div>
-
-            <form onSubmit={handleAddNoteToLead} className="space-y-2">
-              <label style={fontTextStyle} className="font-extrabold text-slate-900 text-[11px] block">Yeni Qeyd / Not Əlavə Et:</label>
-              <textarea 
-                style={fontTextStyle}
-                rows="2"
-                placeholder="Qeyd daxil edin..."
-                value={newNoteText}
-                onChange={e => setNewNoteText(e.target.value)}
-                className="w-full p-2.5 border border-slate-200 rounded-xl text-xs bg-slate-50 text-slate-800 focus:border-blue-500 outline-none font-bold"
-              ></textarea>
-              <button 
-                type="submit" 
-                style={fontTextStyle}
-                className="w-full py-2 bg-blue-600 text-white font-extrabold rounded-xl hover:bg-blue-700 transition cursor-pointer text-xs shadow-xs"
-              >
-                + Notu Əlavə Et
-              </button>
-            </form>
-
-            <div className="space-y-1.5">
-              <label style={fontTextStyle} className="font-extrabold text-slate-900 text-[11px] block">Əvvəlki Qeydlər Tarixçəsi:</label>
-              <div className="space-y-1.5 max-h-40 overflow-y-auto pr-1">
-                {selectedLead.notes.length === 0 ? (
-                  <p style={fontTextStyle} className="text-slate-400 text-center py-4 font-extrabold text-[10px]">Hələ heç bir qeyd əlavə edilməyib.</p>
-                ) : (
-                  selectedLead.notes.map((n, idx) => (
-                    <div key={idx} className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] space-y-0.5">
-                      <div className="flex justify-between items-center text-slate-500 font-bold text-[10px]">
-                        <span style={fontTextStyle}>{n.author}</span>
-                        <span style={fontTextStyle}>{n.date}</span>
-                      </div>
-                      <p style={fontTextStyle} className="text-slate-800 font-extrabold">{n.text}</p>
+            <div className="space-y-2">
+              <h4 style={fontTextStyle} className="font-extrabold text-slate-900 text-xs">Tarixçə Və Notlar:</h4>
+              <div className="bg-slate-50 p-2 rounded-xl border border-slate-200 max-h-40 overflow-y-auto space-y-1.5">
+                {selectedLead.notes.map((n, i) => (
+                  <div key={i} className="bg-white p-2 rounded-lg border border-slate-100 text-[10px]">
+                    <div className="flex justify-between font-bold text-slate-500 mb-0.5">
+                      <span>{n.author}</span>
+                      <span>{n.date}</span>
                     </div>
-                  ))
-                )}
+                    <p style={fontTextStyle} className="text-slate-800 font-extrabold">{n.text}</p>
+                  </div>
+                ))}
               </div>
             </div>
 
@@ -1049,6 +1959,143 @@ export default function CRM() {
                 Tamamla
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* 10. MODAL: CREATE NEW VOUCHER */}
+      {showNewVoucherModal && (
+        <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-xs z-[9999] flex items-center justify-center p-4 m-0">
+          <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 text-xs animate-in zoom-in-95 duration-150">
+            <div className="flex justify-between items-center border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 bg-purple-100 text-purple-700 rounded-xl flex items-center justify-center font-black">
+                  <Ticket size={18} />
+                </div>
+                <div>
+                  <h3 style={fontTextStyle} className="font-extrabold text-slate-900 text-sm">Yeni Vauçer Yaradılması</h3>
+                  <p style={fontTextStyle} className="text-[10px] text-slate-400 font-bold">Korporativ və ya Hədiyyə vauçeri təyin edin</p>
+                </div>
+              </div>
+              <button onClick={() => setShowNewVoucherModal(false)} className="p-1.5 text-slate-400 hover:text-slate-600 rounded-xl cursor-pointer">
+                <X size={18} />
+              </button>
+            </div>
+
+            <form onSubmit={handleCreateVoucher} className="space-y-3">
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Vauçer Kodu (Boş qalsa avtomatik verilir):</label>
+                <input 
+                  type="text" 
+                  placeholder="Məs: VCH-2026-PROMO"
+                  value={newVoucherData.code}
+                  onChange={e => setNewVoucherData({ ...newVoucherData, code: e.target.value })}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-black uppercase text-purple-700 outline-none focus:bg-white"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Vauçer Tipi:</label>
+                  <select 
+                    value={newVoucherData.type}
+                    onChange={e => setNewVoucherData({ ...newVoucherData, type: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                  >
+                    <option value="Gift Voucher (Hədiyyə)">Gift (Hədiyyə)</option>
+                    <option value="Corporate B2B">Corporate B2B</option>
+                    <option value="Marketing Promo">Marketing Promo</option>
+                  </select>
+                </div>
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Endirim Güzəşti:</label>
+                  <input 
+                    type="text" 
+                    placeholder="100% və ya 50 AZN"
+                    value={newVoucherData.discountVal}
+                    onChange={e => setNewVoucherData({ ...newVoucherData, discountVal: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Paket / Xidmət Adı:</label>
+                <input 
+                  type="text" 
+                  placeholder="Məs: 1 Aylıq Limitsiz Fitnes"
+                  value={newVoucherData.package}
+                  onChange={e => setNewVoucherData({ ...newVoucherData, package: e.target.value })}
+                  className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                  required
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Müştəri Adı:</label>
+                  <input 
+                    type="text" 
+                    placeholder="Ad Soyad"
+                    value={newVoucherData.clientName}
+                    onChange={e => setNewVoucherData({ ...newVoucherData, clientName: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                    required
+                  />
+                </div>
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Telefon Nömrəsi:</label>
+                  <input 
+                    type="text" 
+                    placeholder="+994 50..."
+                    value={newVoucherData.clientPhone}
+                    onChange={e => setNewVoucherData({ ...newVoucherData, clientPhone: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Şirkət / Tərəfdaş:</label>
+                  <input 
+                    type="text" 
+                    placeholder="Məs: Pasha Holding"
+                    value={newVoucherData.partnerCompany}
+                    onChange={e => setNewVoucherData({ ...newVoucherData, partnerCompany: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                  />
+                </div>
+                <div>
+                  <label style={fontTextStyle} className="block text-slate-600 font-extrabold mb-1">Son Bitiş Tarixi:</label>
+                  <input 
+                    type="date" 
+                    value={newVoucherData.expiryDate}
+                    onChange={e => setNewVoucherData({ ...newVoucherData, expiryDate: e.target.value })}
+                    className="w-full p-2 border border-slate-200 rounded-xl bg-slate-50 font-bold outline-none"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-2 pt-3 border-t border-slate-100">
+                <button 
+                  type="button" 
+                  onClick={() => setShowNewVoucherModal(false)} 
+                  className="px-4 py-2 bg-slate-100 text-slate-700 font-extrabold rounded-xl hover:bg-slate-200 transition cursor-pointer"
+                >
+                  Ləğv Et
+                </button>
+                <button 
+                  type="submit" 
+                  className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-extrabold rounded-xl transition cursor-pointer shadow-xs flex items-center gap-1.5"
+                >
+                  <Plus size={14} /> Vauçeri Yarad
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

@@ -8,16 +8,17 @@ import Lockers from './Lockers';
 import Massage from './Massage';
 import CRM from './CRM';
 import POS from './POS';
+import OperationsHR from './OperationsHR';
 import BeautySalon from './BeautySalon';
 import Barber from './Barber';
 import React, { useState } from 'react';
 import {
-  Users, CreditCard, Activity, BarChart3, Search, Bell, Key, Car, Package, 
+  Users, CreditCard, Activity, BarChart3, Building2, Search, Bell, Key, Car, Package, 
   ShoppingCart, UserCheck, ArrowUpRight, ArrowDownRight, Dumbbell, Coffee, 
   Scissors, Sparkles, Store, ChevronDown, ChevronUp, HandHeart, CalendarRange, Check, LogOut,
-  Menu, X
+  Menu, X, ShoppingBag, Info, Filter, TrendingUp, Layers, ArrowRightLeft, Snowflake
 } from 'lucide-react';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Line } from 'recharts';
 
 const demographicData = {
   totalActive: 1240,
@@ -34,11 +35,94 @@ const paymentBreakdown = {
 };
 
 const facilityRevenues = {
-  parking: { total: '340 AZN', cash: '100 AZN', card: '240 AZN' },
-  cafe:    { total: '850 AZN', cash: '250 AZN', card: '600 AZN' },
-  massage: { total: '510 AZN', cash: '150 AZN', card: '360 AZN' },
-  barber:  { total: '420 AZN', cash: '120 AZN', card: '300 AZN' },
-  salon:   { total: '680 AZN', cash: '180 AZN', card: '500 AZN' }
+  parking:  { 
+    name: 'Parkinq', 
+    total: '340 AZN', 
+    cash: '100 AZN', 
+    card: '240 AZN', 
+    icon: Car,
+    chartData: [
+      { time: '08:00', total: 40 }, { time: '10:00', total: 70 }, { time: '12:00', total: 90 }, 
+      { time: '14:00', total: 50 }, { time: '16:00', total: 40 }, { time: '18:00', total: 50 }
+    ]
+  },
+  carwash:  { 
+    name: 'Avto Yuma & Detailing', 
+    total: '460 AZN', 
+    cash: '160 AZN', 
+    card: '300 AZN', 
+    icon: Sparkles,
+    chartData: [
+      { time: '08:00', total: 50 }, { time: '10:00', total: 110 }, { time: '12:00', total: 130 }, 
+      { time: '14:00', total: 80 }, { time: '16:00', total: 50 }, { time: '18:00', total: 40 }
+    ]
+  },
+  cafe:     { 
+    name: 'Kafe & FitBar', 
+    total: '850 AZN', 
+    cash: '250 AZN', 
+    card: '600 AZN', 
+    icon: Coffee,
+    chartData: [
+      { time: '08:00', total: 90 }, { time: '10:00', total: 140 }, { time: '12:00', total: 210 }, 
+      { time: '14:00', total: 160 }, { time: '16:00', total: 150 }, { time: '18:00', total: 100 }
+    ]
+  },
+  massage:  { 
+    name: 'Masaj & SPA', 
+    total: '510 AZN', 
+    cash: '150 AZN', 
+    card: '360 AZN', 
+    icon: HandHeart,
+    chartData: [
+      { time: '08:00', total: 0 }, { time: '10:00', total: 120 }, { time: '12:00', total: 150 }, 
+      { time: '14:00', total: 110 }, { time: '16:00', total: 130 }, { time: '18:00', total: 0 }
+    ]
+  },
+  barber:   { 
+    name: 'Bərbər', 
+    total: '420 AZN', 
+    cash: '120 AZN', 
+    card: '300 AZN', 
+    icon: Scissors,
+    chartData: [
+      { time: '08:00', total: 30 }, { time: '10:00', total: 90 }, { time: '12:00', total: 110 }, 
+      { time: '14:00', total: 80 }, { time: '16:00', total: 70 }, { time: '18:00', total: 40 }
+    ]
+  },
+  salon:    { 
+    name: 'Gözəllik Salonu', 
+    total: '680 AZN', 
+    cash: '180 AZN', 
+    card: '500 AZN', 
+    icon: Sparkles,
+    chartData: [
+      { time: '08:00', total: 40 }, { time: '10:00', total: 150 }, { time: '12:00', total: 190 }, 
+      { time: '14:00', total: 140 }, { time: '16:00', total: 100 }, { time: '18:00', total: 60 }
+    ]
+  },
+  trainers: { 
+    name: 'Təlimçilər (PT)', 
+    total: '1,250 AZN', 
+    cash: '350 AZN', 
+    card: '900 AZN', 
+    icon: Dumbbell,
+    chartData: [
+      { time: '08:00', total: 120 }, { time: '10:00', total: 250 }, { time: '12:00', total: 310 }, 
+      { time: '14:00', total: 180 }, { time: '16:00', total: 240 }, { time: '18:00', total: 150 }
+    ]
+  },
+  merch:    { 
+    name: 'Merç & Geyim', 
+    total: '390 AZN', 
+    cash: '90 AZN', 
+    card: '300 AZN', 
+    icon: ShoppingBag,
+    chartData: [
+      { time: '08:00', total: 20 }, { time: '10:00', total: 80 }, { time: '12:00', total: 140 }, 
+      { time: '14:00', total: 70 }, { time: '16:00', total: 50 }, { time: '18:00', total: 30 }
+    ]
+  }
 };
 
 const filterData = {
@@ -47,16 +131,17 @@ const filterData = {
       salesVal: '4,850', salesUnit: 'AZN', salesDiff: '+18%', salesUp: true,
       newMembersVal: '18', newMembersUnit: 'Nəfər', newDiff: '+12%', newUp: true,
       activePresentVal: '84', activePresentUnit: 'Nəfər', presentDiff: 'Pik: 18:00', presentUp: true,
-      freezesVal: '3', freezesUnit: 'Sorğu', freezeDiff: '-2', freezeUp: false
+      freezesVal: '3', freezesUnit: 'Sorğu', freezeDiff: '-2', freezeUp: false,
+      transfersVal: '2', transfersUnit: 'Sorğu', transferDiff: '+1', transferUp: true
     },
     salesGraph: [
-      { name: '08:00', revenue: 350 },
-      { name: '10:00', revenue: 620 },
-      { name: '12:00', revenue: 890 },
-      { name: '14:00', revenue: 540 },
-      { name: '16:00', revenue: 780 },
-      { name: '18:00', revenue: 1250 },
-      { name: '20:00', revenue: 420 }
+      { name: '08:00', revenue: 350, prevRevenue: 280, cash: 100, card: 250 },
+      { name: '10:00', revenue: 620, prevRevenue: 510, cash: 180, card: 440 },
+      { name: '12:00', revenue: 890, prevRevenue: 790, cash: 250, card: 640 },
+      { name: '14:00', revenue: 540, prevRevenue: 600, cash: 140, card: 400 },
+      { name: '16:00', revenue: 780, prevRevenue: 690, cash: 210, card: 570 },
+      { name: '18:00', revenue: 1250, prevRevenue: 1050, cash: 320, card: 930 },
+      { name: '20:00', revenue: 420, prevRevenue: 380, cash: 120, card: 300 }
     ]
   },
   yesterday: {
@@ -64,16 +149,17 @@ const filterData = {
       salesVal: '3,920', salesUnit: 'AZN', salesDiff: '-4%', salesUp: false,
       newMembersVal: '14', newMembersUnit: 'Nəfər', newDiff: '+5%', newUp: true,
       activePresentVal: '91', activePresentUnit: 'Nəfər', presentDiff: 'Pik: 19:00', presentUp: true,
-      freezesVal: '5', freezesUnit: 'Sorğu', freezeDiff: '+1', freezeUp: true
+      freezesVal: '5', freezesUnit: 'Sorğu', freezeDiff: '+1', freezeUp: true,
+      transfersVal: '1', transfersUnit: 'Sorğu', transferDiff: '0', transferUp: true
     },
     salesGraph: [
-      { name: '08:00', revenue: 200 },
-      { name: '10:00', revenue: 510 },
-      { name: '12:00', revenue: 750 },
-      { name: '14:00', revenue: 400 },
-      { name: '16:00', revenue: 820 },
-      { name: '18:00', revenue: 1100 },
-      { name: '20:00', revenue: 140 }
+      { name: '08:00', revenue: 200, prevRevenue: 220, cash: 60, card: 140 },
+      { name: '10:00', revenue: 510, prevRevenue: 480, cash: 150, card: 360 },
+      { name: '12:00', revenue: 750, prevRevenue: 800, cash: 200, card: 550 },
+      { name: '14:00', revenue: 400, prevRevenue: 420, cash: 110, card: 290 },
+      { name: '16:00', revenue: 820, prevRevenue: 750, cash: 230, card: 590 },
+      { name: '18:00', revenue: 1100, prevRevenue: 1150, cash: 300, card: 800 },
+      { name: '20:00', revenue: 140, prevRevenue: 200, cash: 40, card: 100 }
     ]
   },
   month: {
@@ -81,13 +167,14 @@ const filterData = {
       salesVal: '64,200', salesUnit: 'AZN', salesDiff: '+24%', salesUp: true,
       newMembersVal: '284', newMembersUnit: 'Nəfər', newDiff: '+15%', newUp: true,
       activePresentVal: '1,240', activePresentUnit: 'Üzv', presentDiff: 'Baza 88%', presentUp: true,
-      freezesVal: '42', freezesUnit: 'Sorğu', freezeDiff: '-8%', freezeUp: false
+      freezesVal: '42', freezesUnit: 'Sorğu', freezeDiff: '-8%', freezeUp: false,
+      transfersVal: '18', transfersUnit: 'Sorğu', transferDiff: '+4', transferUp: true
     },
     salesGraph: [
-      { name: 'Həftə 1', revenue: 14200 },
-      { name: 'Həftə 2', revenue: 16800 },
-      { name: 'Həftə 3', revenue: 18400 },
-      { name: 'Həftə 4', revenue: 14800 }
+      { name: 'Həftə 1', revenue: 14200, prevRevenue: 12000, cash: 4000, card: 10200 },
+      { name: 'Həftə 2', revenue: 16800, prevRevenue: 15000, cash: 4800, card: 12000 },
+      { name: 'Həftə 3', revenue: 18400, prevRevenue: 16500, cash: 5200, card: 13200 },
+      { name: 'Həftə 4', revenue: 14800, prevRevenue: 14000, cash: 4100, card: 10700 }
     ]
   },
   custom: {
@@ -95,14 +182,15 @@ const filterData = {
       salesVal: '18,650', salesUnit: 'AZN', salesDiff: 'Xüsusi Aralıq', salesUp: true,
       newMembersVal: '72', newMembersUnit: 'Nəfər', newDiff: 'Aralıq üzrə', newUp: true,
       activePresentVal: '1,100', activePresentUnit: 'Üzv', presentDiff: 'Aralıq üzrə', presentUp: true,
-      freezesVal: '12', freezesUnit: 'Sorğu', freezeDiff: 'Aralıq üzrə', freezeUp: false
+      freezesVal: '12', freezesUnit: 'Sorğu', freezeDiff: 'Aralıq üzrə', freezeUp: false,
+      transfersVal: '5', transfersUnit: 'Sorğu', transferDiff: 'Aralıq üzrə', transferUp: true
     },
     salesGraph: [
-      { name: 'Gün 1', revenue: 2100 },
-      { name: 'Gün 2', revenue: 3400 },
-      { name: 'Gün 3', revenue: 2800 },
-      { name: 'Gün 4', revenue: 4100 },
-      { name: 'Gün 5', revenue: 6250 }
+      { name: 'Gün 1', revenue: 2100, prevRevenue: 1900, cash: 600, card: 1500 },
+      { name: 'Gün 2', revenue: 3400, prevRevenue: 3000, cash: 900, card: 2500 },
+      { name: 'Gün 3', revenue: 2800, prevRevenue: 2900, cash: 800, card: 2000 },
+      { name: 'Gün 4', revenue: 4100, prevRevenue: 3800, cash: 1200, card: 2900 },
+      { name: 'Gün 5', revenue: 6250, prevRevenue: 5500, cash: 1800, card: 4450 }
     ]
   }
 };
@@ -117,6 +205,11 @@ export default function App() {
   const [endDate, setEndDate] = useState('2026-10-28');
   const [showCustomPicker, setShowCustomPicker] = useState(false);
 
+  const [selectedServiceFilter, setSelectedServiceFilter] = useState('all');
+  const [showComparison, setShowComparison] = useState(true);
+
+  const [selectedFacility, setSelectedFacility] = useState(null);
+
   const currentData = filterData[dateFilter] || filterData.today;
 
   const handleApplyCustomDate = () => {
@@ -126,6 +219,46 @@ export default function App() {
 
   const fontDisplayStyle = { fontFamily: "'Archivo Expanded', sans-serif", letterSpacing: '-0.02em' };
   const fontTextStyle = { fontFamily: "'TikTok Sans', system-ui, -apple-system, sans-serif", letterSpacing: '-0.01em' };
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      const data = payload[0].payload;
+      return (
+        <div className="bg-white p-3 border border-slate-200 rounded-2xl shadow-xl text-xs space-y-1.5 min-w-[170px]">
+          <div className="flex justify-between items-center border-b border-slate-100 pb-1">
+            <span style={fontDisplayStyle} className="font-black text-slate-900">{label}</span>
+            <span style={fontTextStyle} className="text-[10px] text-blue-600 font-extrabold bg-blue-50 px-2 py-0.5 rounded-md">Canlı</span>
+          </div>
+
+          <div className="space-y-1 text-[11px]">
+            <div className="flex justify-between">
+              <span style={fontTextStyle} className="text-slate-500 font-bold">Ümumi Gəlir:</span>
+              <span style={fontDisplayStyle} className="font-black text-slate-900">{data.revenue} AZN</span>
+            </div>
+
+            {data.prevRevenue && (
+              <div className="flex justify-between text-slate-400">
+                <span style={fontTextStyle} className="font-bold">Əvvəlki Dövr:</span>
+                <span style={fontDisplayStyle} className="font-black text-slate-500">{data.prevRevenue} AZN</span>
+              </div>
+            )}
+
+            <div className="pt-1 border-t border-slate-100 space-y-0.5 text-[10px]">
+              <div className="flex justify-between text-emerald-700">
+                <span style={fontTextStyle} className="font-bold">Nağd:</span>
+                <span style={fontDisplayStyle} className="font-black">{data.cash || 0} AZN</span>
+              </div>
+              <div className="flex justify-between text-blue-700">
+                <span style={fontTextStyle} className="font-bold">POS Kart:</span>
+                <span style={fontDisplayStyle} className="font-black">{data.card || 0} AZN</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+    return null;
+  };
 
   return (
     <div style={fontTextStyle} className="flex h-screen bg-slate-100 text-slate-800 antialiased overflow-hidden select-none">
@@ -137,7 +270,6 @@ export default function App() {
         }`}
       >
         <div className="w-64">
-          {/* BRAND LOGO */}
           <div className="p-4 border-b border-[#282828] flex items-center justify-between shrink-0">
             <div className="flex items-center gap-3">
               <div 
@@ -161,13 +293,13 @@ export default function App() {
             </button>
           </div>
 
-          {/* NAVIGATION */}
           <nav className="p-2 space-y-1 overflow-y-auto max-h-[calc(100vh-140px)]">
             {[
               { id: 'dashboard', label: 'Dashboard', icon: Activity },
               { id: 'crm', label: 'Müştəri Bazası (CRM)', icon: Users },
               { id: 'pos', label: 'POS / Kassa & Satış', icon: ShoppingCart },
               { id: 'pt', label: 'PT (Personal Training)', icon: Dumbbell },
+              { id: 'operations', label: 'Operations & HR', icon: Building2 },
               { id: 'group_tr', label: 'Group Training (Qrup)', icon: CalendarRange }, 
               { id: 'turnstile', label: 'Turniket & Keçid', icon: Key },
               { id: 'lockers', label: 'Şkaflar (Lockers)', icon: Package }, 
@@ -247,7 +379,6 @@ export default function App() {
           </nav>
         </div>
 
-        {/* USER PROFILE */}
         <div className="p-3 border-t border-[#282828] bg-[#040404]/60 flex items-center justify-between w-64 shrink-0">
           <div className="flex items-center gap-2.5">
             <div 
@@ -258,7 +389,7 @@ export default function App() {
             </div>
             <div>
               <p style={fontTextStyle} className="font-bold text-white text-xs">Ayan X.</p>
-              <p style={fontTextStyle} className="text-[10px] text-neutral-500 font-medium">Junior Supervisor</p>
+              <p style={fontTextStyle} className="text-[10px] text-neutral-500 font-medium">Supervisor</p>
             </div>
           </div>
           <button className="text-neutral-500 hover:text-rose-400 transition p-1 cursor-pointer">
@@ -267,7 +398,7 @@ export default function App() {
         </div>
       </aside>
 
-      {/* MAIN CONTENT AREA WITH LIGHT UI DESIGN */}
+      {/* MAIN CONTENT AREA */}
       <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-[#F8FAFC]">
 
         {/* GLOBAL HEADER */}
@@ -314,7 +445,7 @@ export default function App() {
           {activeTab === 'dashboard' && (
             <div className="space-y-4">
 
-              {/* FILTER & TITLE BAR (LIGHT BLUE SELECTION) */}
+              {/* FILTER & TITLE BAR */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-4 rounded-2xl border border-slate-200/90 shadow-2xs relative">
                 <div>
                   <h2 style={fontDisplayStyle} className="text-sm font-black text-slate-900 flex items-center gap-2 uppercase tracking-wide">
@@ -328,7 +459,6 @@ export default function App() {
                   </p>
                 </div>
 
-                {/* LIGHT UI FILTER BUTTONS WITH BLUE ACTIVE ACCENT */}
                 <div className="flex items-center gap-1 bg-slate-100/80 p-1 rounded-xl border border-slate-200">
                   {[
                     { id: 'today', label: 'Bu gün' },
@@ -366,7 +496,6 @@ export default function App() {
                   </button>
                 </div>
 
-                {/* TARİX ARALIĞI POPUP */}
                 {showCustomPicker && (
                   <div className="absolute right-4 top-16 z-30 bg-white border border-slate-200 shadow-2xl rounded-2xl p-4 w-80 space-y-3">
                     <div className="flex justify-between items-center border-b border-slate-100 pb-2">
@@ -410,10 +539,9 @@ export default function App() {
                 )}
               </div>
 
-              {/* SECTION 1: DEMOGRAPHICS & PAYMENT METHODS (LIGHT CARDS) */}
+              {/* DEMOGRAPHICS & PAYMENT METHODS */}
               <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
 
-                {/* DEMOGRAPHICS */}
                 <div className="xl:col-span-1 bg-white border border-slate-200/90 p-4 rounded-2xl flex flex-col justify-between shadow-2xs">
                   <div>
                     <div className="flex justify-between items-start mb-3">
@@ -480,7 +608,6 @@ export default function App() {
                   </div>
                 </div>
 
-                {/* DAILY PAYMENT METHODS */}
                 <div className="xl:col-span-2 bg-white border border-slate-200/90 p-4 rounded-2xl flex flex-col justify-between shadow-2xs">
                   <div>
                     <div className="flex justify-between items-center mb-3">
@@ -527,29 +654,35 @@ export default function App() {
                   <h3 style={fontDisplayStyle} className="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-2">
                     <Store className="text-blue-600" size={16} /> Kompleks Obyektləri Üzrə Günlük Dövriyyə
                   </h3>
-                  <span style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">Parkinq, Kafe, Masaj, Bərbər və Salon</span>
+                  <span style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">
+                    Parkinq, Avto Yuma, Kafe, Masaj, Bərbər, Salon, Təlimçilər və Merç
+                  </span>
                 </div>
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
-                  {[
-                    { name: 'Parkinq', icon: Car, data: facilityRevenues.parking },
-                    { name: 'Kafe', icon: Coffee, data: facilityRevenues.cafe },
-                    { name: 'Masaj', icon: HandHeart, data: facilityRevenues.massage },
-                    { name: 'Bərbər', icon: Scissors, data: facilityRevenues.barber },
-                    { name: 'Gözəllik Salonu', icon: Sparkles, data: facilityRevenues.salon },
-                  ].map((item, idx) => {
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-8 gap-2.5">
+                  {Object.keys(facilityRevenues).map((key) => {
+                    const item = facilityRevenues[key];
                     const Icon = item.icon;
                     return (
-                      <div key={idx} className="bg-slate-50 border border-slate-200 p-3 rounded-xl flex flex-col justify-between hover:bg-white hover:border-blue-200 transition">
-                        <div className="flex items-center justify-between mb-1.5">
-                          <span style={fontTextStyle} className="font-extrabold text-[11px] text-slate-700">{item.name}</span>
-                          <Icon size={14} className="text-blue-600" />
+                      <div key={key} className="bg-slate-50 border border-slate-200 p-2.5 rounded-xl flex flex-col justify-between hover:bg-white hover:border-blue-200 transition group relative">
+                        <div className="flex items-center justify-between mb-1">
+                          <span style={fontTextStyle} className="font-extrabold text-[10px] text-slate-700 truncate pr-1">{item.name}</span>
+                          <div className="flex items-center gap-1 shrink-0">
+                            <button
+                              onClick={() => setSelectedFacility(item)}
+                              className="p-1 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition cursor-pointer"
+                              title={`${item.name} haqqında ətraflı grafik & info`}
+                            >
+                              <Info size={13} />
+                            </button>
+                            <Icon size={13} className="text-blue-600" />
+                          </div>
                         </div>
                         <div>
-                          <h4 style={fontDisplayStyle} className="text-lg font-black text-slate-900">{item.data.total}</h4>
-                          <div className="mt-2 pt-1.5 border-t border-slate-200 space-y-0.5 text-[10px]">
-                            <div className="flex justify-between text-slate-500"><span style={fontTextStyle} className="font-bold">Nağd:</span> <strong className="text-slate-800">{item.data.cash}</strong></div>
-                            <div className="flex justify-between text-slate-500"><span style={fontTextStyle} className="font-bold">Kart:</span> <strong className="text-slate-900">{item.data.card}</strong></div>
+                          <h4 style={fontDisplayStyle} className="text-base font-black text-slate-900 truncate">{item.total}</h4>
+                          <div className="mt-1.5 pt-1 border-t border-slate-200 space-y-0.5 text-[9px]">
+                            <div className="flex justify-between text-slate-500"><span style={fontTextStyle} className="font-bold">Nağd:</span> <strong className="text-slate-800">{item.cash}</strong></div>
+                            <div className="flex justify-between text-slate-500"><span style={fontTextStyle} className="font-bold">Kart:</span> <strong className="text-slate-900">{item.card}</strong></div>
                           </div>
                         </div>
                       </div>
@@ -558,57 +691,123 @@ export default function App() {
                 </div>
               </div>
 
-              {/* KPI CARDS (LIGHT STATUS COLOR CARDS) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {/* KPI CARDS (DONDURMA VƏ TRANSFER MÜRACİƏTLƏRİ İLƏ BİRLİKDƏ) */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3">
                 {[
-                  { title: 'Dövriyyə Dəyişimi', val: currentData.kpi.salesVal, unit: currentData.kpi.salesUnit, diff: currentData.kpi.salesDiff, isUp: currentData.kpi.salesUp, sub: 'Nağd + POS', bg: 'bg-emerald-50/60 border-emerald-200' },
-                  { title: 'Yeni Qoşulan Üvlər', val: currentData.kpi.newMembersVal, unit: currentData.kpi.newMembersUnit, diff: currentData.kpi.newDiff, isUp: currentData.kpi.newUp, sub: 'Yeni abunəliklər', bg: 'bg-blue-50/60 border-blue-200' },
-                  { title: 'Zalda Olan Üzvlər', val: currentData.kpi.activePresentVal, unit: currentData.kpi.activePresentUnit, diff: currentData.kpi.presentDiff, isUp: currentData.kpi.presentUp, sub: 'Turniket canlı', bg: 'bg-amber-50/60 border-amber-200' },
-                  { title: 'Dondurma Sorğuları', val: currentData.kpi.freezesVal, unit: currentData.kpi.freezesUnit, diff: currentData.kpi.freezeDiff, isUp: currentData.kpi.freezeUp, sub: 'Aktiv paketlər', bg: 'bg-purple-50/60 border-purple-200' },
-                ].map((kpi, idx) => (
-                  <div key={idx} className={`${kpi.bg} border p-3.5 rounded-2xl flex flex-col justify-between shadow-2xs`}>
-                    <span style={fontTextStyle} className="font-extrabold text-[10px] text-slate-600 uppercase tracking-wider">{kpi.title}</span>
-                    <div className="mt-2">
-                      <div className="flex items-baseline gap-1.5">
-                        <span style={fontDisplayStyle} className="text-xl font-black text-slate-900">{kpi.val}</span>
-                        <span style={fontTextStyle} className="text-sm font-black text-slate-900">{kpi.unit}</span>
+                  { title: 'Dövriyyə Dəyişimi', val: currentData.kpi.salesVal, unit: currentData.kpi.salesUnit, diff: currentData.kpi.salesDiff, isUp: currentData.kpi.salesUp, sub: 'Nağd + POS', bg: 'bg-emerald-50/60 border-emerald-200', icon: TrendingUp },
+                  { title: 'Yeni Qoşulan Üvlər', val: currentData.kpi.newMembersVal, unit: currentData.kpi.newMembersUnit, diff: currentData.kpi.newDiff, isUp: currentData.kpi.newUp, sub: 'Yeni abunəliklər', bg: 'bg-blue-50/60 border-blue-200', icon: Users },
+                  { title: 'Zalda Olan Üzvlər', val: currentData.kpi.activePresentVal, unit: currentData.kpi.activePresentUnit, diff: currentData.kpi.presentDiff, isUp: currentData.kpi.presentUp, sub: 'Turniket canlı', bg: 'bg-amber-50/60 border-amber-200', icon: Key },
+                  { title: 'Dondurma Sorğuları', val: currentData.kpi.freezesVal, unit: currentData.kpi.freezesUnit, diff: currentData.kpi.freezeDiff, isUp: currentData.kpi.freezeUp, sub: 'Aktiv dondurma', bg: 'bg-purple-50/60 border-purple-200', icon: Snowflake },
+                  { title: 'Transfer Sorğuları', val: currentData.kpi.transfersVal, unit: currentData.kpi.transfersUnit, diff: currentData.kpi.transferDiff, isUp: currentData.kpi.transferUp, sub: 'Kurs transferi', bg: 'bg-cyan-50/60 border-cyan-200', icon: ArrowRightLeft },
+                ].map((kpi, idx) => {
+                  const CardIcon = kpi.icon;
+                  return (
+                    <div key={idx} className={`${kpi.bg} border p-3.5 rounded-2xl flex flex-col justify-between shadow-2xs`}>
+                      <div className="flex items-center justify-between">
+                        <span style={fontTextStyle} className="font-extrabold text-[10px] text-slate-600 uppercase tracking-wider">{kpi.title}</span>
+                        <CardIcon size={14} className="text-slate-500 opacity-70" />
                       </div>
-                      <div className="flex items-center justify-between text-[10px] mt-1 pt-1 border-t border-slate-200/60">
-                        <span style={fontTextStyle} className={`font-black flex items-center gap-0.5 ${kpi.isUp ? 'text-emerald-700' : 'text-rose-600'}`}>
-                          {kpi.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />} {kpi.diff}
-                        </span>
-                        <span style={fontTextStyle} className="text-slate-500 font-bold">{kpi.sub}</span>
+                      <div className="mt-2">
+                        <div className="flex items-baseline gap-1.5">
+                          <span style={fontDisplayStyle} className="text-xl font-black text-slate-900">{kpi.val}</span>
+                          <span style={fontTextStyle} className="text-sm font-black text-slate-900">{kpi.unit}</span>
+                        </div>
+                        <div className="flex items-center justify-between text-[10px] mt-1 pt-1 border-t border-slate-200/60">
+                          <span style={fontTextStyle} className={`font-black flex items-center gap-0.5 ${kpi.isUp ? 'text-emerald-700' : 'text-rose-600'}`}>
+                            {kpi.isUp ? <ArrowUpRight size={12} /> : <ArrowDownRight size={12} />} {kpi.diff}
+                          </span>
+                          <span style={fontTextStyle} className="text-slate-500 font-bold">{kpi.sub}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
 
-              {/* REVENUE GRAPH WITH LIGHT BLUE GRADIENT */}
-              <div className="bg-white border border-slate-200/90 p-4 rounded-2xl shadow-2xs">
-                <div className="flex items-center justify-between mb-3">
+              {/* GƏLİR DİNAMİKASI VƏ ANALİTİKA GRAFİKİ */}
+              <div className="bg-white border border-slate-200/90 p-4 rounded-2xl shadow-2xs space-y-3">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 pb-3">
                   <div>
-                    <h3 style={fontDisplayStyle} className="font-black text-slate-900 text-xs uppercase tracking-wider">Gəlir Dinamikası (AZN)</h3>
-                    <p style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">Saatlıq daxilolmalar qrafiki</p>
+                    <h3 style={fontDisplayStyle} className="font-black text-slate-900 text-xs uppercase tracking-wider flex items-center gap-2">
+                      <TrendingUp className="text-blue-600" size={16} /> Gəlir Dinamikası Və Analitika (AZN)
+                    </h3>
+                    <p style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">Servislərə görə süzgəcləmə və əvvəlki dövrlə müqayisə</p>
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-2">
+                    <div className="flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-xl text-xs font-bold">
+                      <Filter size={13} className="text-blue-600" />
+                      <select
+                        style={fontTextStyle}
+                        value={selectedServiceFilter}
+                        onChange={(e) => setSelectedServiceFilter(e.target.value)}
+                        className="bg-transparent text-slate-800 font-extrabold outline-none cursor-pointer text-xs"
+                      >
+                        <option value="all">Bütün Servislər (Cəm)</option>
+                        <option value="parking">Parkinq</option>
+                        <option value="carwash">Avto Yuma & Detailing</option>
+                        <option value="cafe">Kafe & FitBar</option>
+                        <option value="massage">Masaj & SPA</option>
+                        <option value="barber">Bərbər</option>
+                        <option value="salon">Gözəllik Salonu</option>
+                        <option value="trainers">Təlimçilər (PT)</option>
+                        <option value="merch">Merç & Geyim</option>
+                      </select>
+                    </div>
+
+                    <button
+                      onClick={() => setShowComparison(!showComparison)}
+                      style={fontTextStyle}
+                      className={`px-3 py-1 rounded-xl text-xs font-bold border transition flex items-center gap-1.5 cursor-pointer ${
+                        showComparison 
+                          ? 'bg-blue-50 text-blue-700 border-blue-200 font-black' 
+                          : 'bg-slate-50 text-slate-600 border-slate-200'
+                      }`}
+                    >
+                      <Layers size={13} />
+                      <span>Əvvəlki Dövr ilə Müqayisə</span>
+                    </button>
                   </div>
                 </div>
-                <div className="h-56">
+
+                <div className="h-64">
                   <ResponsiveContainer width="100%" height="100%">
                     <AreaChart data={currentData.salesGraph}>
                       <defs>
                         <linearGradient id="colorRev" x1="0" y1="0" x2="0" y2="1">
-                          <stop offset="5%" stopColor="#2563EB" stopOpacity={0.25} />
+                          <stop offset="5%" stopColor="#2563EB" stopOpacity={0.3} />
                           <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
                         </linearGradient>
                       </defs>
                       <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
                       <XAxis dataKey="name" stroke="#64748b" fontSize={10} />
                       <YAxis stroke="#64748b" fontSize={10} />
-                      <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1', borderRadius: '12px', color: '#0f172a', fontSize: '11px', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)' }} />
+                      <Tooltip content={<CustomTooltip />} />
+                      
                       <Area type="monotone" dataKey="revenue" stroke="#2563EB" strokeWidth={2.5} fillOpacity={1} fill="url(#colorRev)" />
+                      
+                      {showComparison && (
+                        <Line type="monotone" dataKey="prevRevenue" stroke="#94a3b8" strokeWidth={2} strokeDasharray="4 4" dot={false} />
+                      )}
                     </AreaChart>
                   </ResponsiveContainer>
                 </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 pt-2 border-t border-slate-100 text-xs">
+                  <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span style={fontTextStyle} className="text-slate-500 font-bold">Pik Saat Gəliri:</span>
+                    <strong style={fontDisplayStyle} className="text-slate-900 font-black">18:00 (1,250 AZN)</strong>
+                  </div>
+                  <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span style={fontTextStyle} className="text-slate-500 font-bold">Orta Saatlıq Çek:</span>
+                    <strong style={fontDisplayStyle} className="text-blue-600 font-black">692 AZN / Saat</strong>
+                  </div>
+                  <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200/80 flex items-center justify-between">
+                    <span style={fontTextStyle} className="text-slate-500 font-bold">Dövr Artımı:</span>
+                    <strong style={fontDisplayStyle} className="text-emerald-600 font-black">+14.2% (Müsbət)</strong>
+                  </div>
+                </div>
+
               </div>
 
             </div>
@@ -626,10 +825,89 @@ export default function App() {
           {activeTab === 'turnstile' && <Turnstile />}
           {activeTab === 'pt' && <PersonalTraining />}
           {activeTab === 'pos' && <POS />}
+          {activeTab === 'operations' && <OperationsHR />}
           {activeTab === 'group_tr' && <GroupTraining />}
 
         </main>
       </div>
+
+      {/* MODAL WINDOW FOR FACILITIES */}
+      {selectedFacility && (
+        <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-xs z-50 flex items-center justify-center p-4">
+          <div className="bg-white rounded-3xl border border-slate-200 shadow-2xl max-w-xl w-full p-6 space-y-4 animate-in zoom-in-95 duration-150 relative">
+            
+            <div className="flex items-center justify-between border-b border-slate-100 pb-3">
+              <div className="flex items-center gap-2.5">
+                <div className="p-2 bg-blue-50 text-blue-600 rounded-xl border border-blue-100">
+                  {React.createElement(selectedFacility.icon, { size: 18 })}
+                </div>
+                <div>
+                  <h3 style={fontDisplayStyle} className="font-black text-slate-900 text-sm uppercase tracking-wider">
+                    {selectedFacility.name} — Günlük Analitika
+                  </h3>
+                  <p style={fontTextStyle} className="text-[10px] text-slate-500 font-bold">İş saatları və satış dinamikası</p>
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setSelectedFacility(null)}
+                className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-xl transition cursor-pointer"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3 text-xs">
+              <div className="bg-slate-50 p-3 rounded-2xl border border-slate-200">
+                <span style={fontTextStyle} className="text-slate-500 font-extrabold text-[10px] uppercase block">Ümumi Dövriyyə</span>
+                <p style={fontDisplayStyle} className="text-lg font-black text-slate-900 mt-0.5">{selectedFacility.total}</p>
+              </div>
+              <div className="bg-emerald-50/60 p-3 rounded-2xl border border-emerald-200">
+                <span style={fontTextStyle} className="text-emerald-700 font-extrabold text-[10px] uppercase block">Nağd (Cash)</span>
+                <p style={fontDisplayStyle} className="text-lg font-black text-emerald-950 mt-0.5">{selectedFacility.cash}</p>
+              </div>
+              <div className="bg-blue-50/60 p-3 rounded-2xl border border-blue-200">
+                <span style={fontTextStyle} className="text-blue-700 font-extrabold text-[10px] uppercase block">POS Kart</span>
+                <p style={fontDisplayStyle} className="text-lg font-black text-blue-950 mt-0.5">{selectedFacility.card}</p>
+              </div>
+            </div>
+
+            <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200 space-y-2">
+              <h4 style={fontDisplayStyle} className="text-xs font-black text-slate-900 uppercase tracking-wider">
+                Saatlıq Satış Qrafiki (AZN)
+              </h4>
+              <div className="h-44">
+                <ResponsiveContainer width="100%" height="100%">
+                  <AreaChart data={selectedFacility.chartData}>
+                    <defs>
+                      <linearGradient id="colorFacility" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="5%" stopColor="#2563EB" stopOpacity={0.3} />
+                        <stop offset="95%" stopColor="#2563EB" stopOpacity={0} />
+                      </linearGradient>
+                    </defs>
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+                    <XAxis dataKey="time" stroke="#64748b" fontSize={10} />
+                    <YAxis stroke="#64748b" fontSize={10} />
+                    <Tooltip contentStyle={{ backgroundColor: '#ffffff', borderColor: '#cbd5e1', borderRadius: '12px', fontSize: '11px' }} />
+                    <Area type="monotone" dataKey="total" stroke="#2563EB" strokeWidth={2} fillOpacity={1} fill="url(#colorFacility)" />
+                  </AreaChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+
+            <div className="flex justify-end pt-2 border-t border-slate-100">
+              <button
+                onClick={() => setSelectedFacility(null)}
+                style={fontTextStyle}
+                className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-extrabold rounded-xl text-xs transition cursor-pointer shadow-xs"
+              >
+                Bağla
+              </button>
+            </div>
+
+          </div>
+        </div>
+      )}
 
     </div>
   );

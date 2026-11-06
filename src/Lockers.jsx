@@ -4,12 +4,12 @@ import {
 } from 'lucide-react';
 
 const initialLockers = [
-  { id: 'L-101', number: '101', zone: 'Kişi Soyunma Otağı', status: 'Occupied', client: 'Kamran Alıyev', phone: '+994 50 123 45 67', startDate: '01.09.2026', endDate: '01.09.2027' },
-  { id: 'L-102', number: '102', zone: 'Kişi Soyunma Otağı', status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-' },
-  { id: 'L-103', number: '103', zone: 'Kişi Soyunma Otağı', status: 'Occupied', client: 'Özcan Uçar', phone: '+994 55 987 65 43', startDate: '15.06.2026', endDate: '15.06.2027' },
-  { id: 'L-201', number: '201', zone: 'Qadın Soyunma Otağı', status: 'Occupied', client: 'Ayan Xəlilova', phone: '+994 70 555 44 33', startDate: '10.08.2026', endDate: '10.08.2027' },
-  { id: 'L-202', number: '202', zone: 'Qadın Soyunma Otağı', status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-' },
-  { id: 'L-203', number: '203', zone: 'Qadın Soyunma Otağı', status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-' },
+  { id: 'L-101', number: '101', zone: 'Kişi Soyunma Otağı', status: 'Occupied', client: 'Kamran Alıyev', phone: '+994 50 123 45 67', startDate: '01.09.2026', endDate: '01.09.2027', durationType: '1 İllik' },
+  { id: 'L-102', number: '102', zone: 'Kişi Soyunma Otağı', status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-', durationType: '-' },
+  { id: 'L-103', number: '103', zone: 'Kişi Soyunma Otağı', status: 'Occupied', client: 'Özcan Uçar', phone: '+994 55 987 65 43', startDate: '15.06.2026', endDate: '15.06.2027', durationType: '1 İllik' },
+  { id: 'L-201', number: '201', zone: 'Qadın Soyunma Otağı', status: 'Occupied', client: 'Ayan Xəlilova', phone: '+994 70 555 44 33', startDate: '10.08.2026', endDate: '10.11.2026', durationType: '3 Aylıq' },
+  { id: 'L-202', number: '202', zone: 'Qadın Soyunma Otağı', status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-', durationType: '-' },
+  { id: 'L-203', number: '203', zone: 'Qadın Soyunma Otağı', status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-', durationType: '-' },
 ];
 
 export default function Lockers() {
@@ -17,8 +17,9 @@ export default function Lockers() {
   const [searchQuery, setSearchQuery] = useState('');
   const [zoneFilter, setZoneFilter] = useState('ALL');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [durationFilter, setDurationFilter] = useState('ALL'); // 🆕 MÜDDƏT FİLTRİ
 
-  // ŞKAFIN İCARƏYƏ VERİLMƏSİ VƏ YA TƏMİZLƏNMƏSİ ÜÇÜN MODAL VƏ YA PROMPT SİMULASİyASI
+  // ŞKAFIN İCARƏYƏ VERİLMƏSİ VƏ YA TƏMİZLƏNMƏSİ
   const handleToggleLocker = (lockerId) => {
     const locker = lockers.find(l => l.id === lockerId);
     if (!locker) return;
@@ -27,7 +28,7 @@ export default function Lockers() {
       const confirmRelease = window.confirm(`Şkaf #${locker.number} boşaldılsın? (Müştəri: ${locker.client})`);
       if (confirmRelease) {
         setLockers(lockers.map(l => l.id === lockerId ? {
-          ...l, status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-'
+          ...l, status: 'Available', client: '-', phone: '-', startDate: '-', endDate: '-', durationType: '-'
         } : l));
       }
     } else {
@@ -35,11 +36,28 @@ export default function Lockers() {
       if (!clientName) return;
       const clientPhone = prompt('Müştərinin əlaqə nömrəsi:', '+994 ');
       
-      const today = new Date().toLocaleDateString();
-      const nextYear = new Date(Date.now() + 31536000000).toLocaleDateString();
+      const durationChoice = prompt('İcarə müddətini seçin:\n1 - 1 Aylıq\n2 - 3 Aylıq\n3 - 6 Aylıq\n4 - 1 İllik', '4');
+      
+      let durationLabel = '1 İllik';
+      let daysToAdd = 365;
+      if (durationChoice === '1') { durationLabel = '1 Aylıq'; daysToAdd = 30; }
+      else if (durationChoice === '2') { durationLabel = '3 Aylıq'; daysToAdd = 90; }
+      else if (durationChoice === '3') { durationLabel = '6 Aylıq'; daysToAdd = 180; }
+
+      const today = new Date();
+      const endDateObj = new Date(today.getTime() + daysToAdd * 86400000);
+
+      const startDateFormatted = today.toLocaleDateString();
+      const endDateFormatted = endDateObj.toLocaleDateString();
 
       setLockers(lockers.map(l => l.id === lockerId ? {
-        ...l, status: 'Occupied', client: clientName, phone: clientPhone || '-', startDate: today, endDate: nextYear
+        ...l, 
+        status: 'Occupied', 
+        client: clientName, 
+        phone: clientPhone || '-', 
+        startDate: startDateFormatted, 
+        endDate: endDateFormatted,
+        durationType: durationLabel
       } : l));
     }
   };
@@ -48,7 +66,8 @@ export default function Lockers() {
     const matchesSearch = l.number.includes(searchQuery) || l.client.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesZone = zoneFilter === 'ALL' || l.zone === zoneFilter;
     const matchesStatus = statusFilter === 'ALL' || l.status === statusFilter;
-    return matchesSearch && matchesZone && matchesStatus;
+    const matchesDuration = durationFilter === 'ALL' || l.durationType === durationFilter; // 🆕 MÜDDƏT FİLTR YOXLANMASI
+    return matchesSearch && matchesZone && matchesStatus && matchesDuration;
   });
 
   const occupiedCount = lockers.filter(l => l.status === 'Occupied').length;
@@ -87,6 +106,8 @@ export default function Lockers() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 text-xs">
+          
+          {/* ZONA FİLTRİ */}
           <select 
             value={zoneFilter} 
             onChange={e => setZoneFilter(e.target.value)}
@@ -97,6 +118,7 @@ export default function Lockers() {
             <option value="Qadın Soyunma Otağı">Qadın Soyunma Otağı</option>
           </select>
 
+          {/* STATUS FİLTRİ */}
           <select 
             value={statusFilter} 
             onChange={e => setStatusFilter(e.target.value)}
@@ -106,6 +128,20 @@ export default function Lockers() {
             <option value="Occupied">Dolu (Rent)</option>
             <option value="Available">Boş</option>
           </select>
+
+          {/* 🆕 MÜDDƏT FİLTRİ */}
+          <select 
+            value={durationFilter} 
+            onChange={e => setDurationFilter(e.target.value)}
+            className="p-1.5 border rounded-lg font-bold bg-slate-50 text-slate-700"
+          >
+            <option value="ALL">Bütün Müddətlər</option>
+            <option value="1 Aylıq">1 Aylıq</option>
+            <option value="3 Aylıq">3 Aylıq</option>
+            <option value="6 Aylıq">6 Aylıq</option>
+            <option value="1 İllik">1 İllik</option>
+          </select>
+
         </div>
       </div>
 
@@ -125,11 +161,18 @@ export default function Lockers() {
                   <span className="font-black text-sm font-mono bg-white px-2.5 py-1 rounded-lg border shadow-xs">
                     Şkaf #{locker.number}
                   </span>
-                  <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
-                    isOccupied ? 'bg-rose-600 text-white' : 'bg-emerald-600 text-white'
-                  }`}>
-                    {isOccupied ? 'DOLU (RENT)' : 'BOŞ'}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    {isOccupied && locker.durationType !== '-' && (
+                      <span className="px-2 py-0.5 rounded text-[10px] font-extrabold bg-blue-100 text-blue-800">
+                        {locker.durationType}
+                      </span>
+                    )}
+                    <span className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                      isOccupied ? 'bg-rose-600 text-white' : 'bg-emerald-600 text-white'
+                    }`}>
+                      {isOccupied ? 'DOLU (RENT)' : 'BOŞ'}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="text-xs text-slate-700 space-y-1.5 mb-4">

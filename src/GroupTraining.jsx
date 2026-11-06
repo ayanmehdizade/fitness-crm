@@ -5,7 +5,45 @@ import {
 
 const daysOfWeek = ['Bazar ertəsi', 'Çərşənbə axşamı', 'Çərşənbə', 'Cümə axşamı', 'Cümə', 'Şənbə', 'Bazar'];
 const timeSlots = ['08:00', '09:00', '10:00', '11:00', '12:00', '15:00', '17:00', '18:00', '19:00', '20:00'];
-const trainersList = ['Nigar Həsənova', 'Orxan Məmmədov', 'Tural Hüseynov', 'Elmir Uçar'];
+
+// 🟢 Популярные направления занятий для списка
+const availableClassNames = [
+  'Spinning / Cycle',
+  'Yoga & Stretching',
+  'Pilates Reformer',
+  'Functional Training',
+  'Crossfit',
+  'Zumba',
+  'Boxing / Kickboxing',
+  'Digər (Özüm daxil edəcəyəm)'
+];
+
+// 🟢 Полная база всех тренеров и инструкторов
+const trainersList = [
+  'Nigar Həsənova', 
+  'Orxan Məmmədov', 
+  'Tural Hüseynov', 
+  'Elmir Uçar',
+  'Tamerlan P.',
+  'Ali İ.',
+  'Kamran A.',
+  'Ramiq Əliyev',
+  'Cavid Quliyev'
+];
+
+// 🟢 База всех гостей клуба в системе
+const allClubGuests = [
+  'Ayan Xəlilova',
+  'Kamran Alıyev',
+  'Leyla Məmmədova',
+  'Rauf Qasımov',
+  'Sevda Məmmədova',
+  'Elçin Məmmədov',
+  'Günay Əliyeva',
+  'Nərmin Məmmədova',
+  'Aytən Məmmədova',
+  'Vüqar Məmmədov'
+];
 
 const initialGroupSchedule = [
   { 
@@ -46,27 +84,30 @@ const initialGroupSchedule = [
 export default function GroupTraining() {
   const [schedule, setSchedule] = useState(initialGroupSchedule);
   
-  // Detal modalı
+  // Детали выбранного класса
   const [selectedClass, setSelectedClass] = useState(null);
 
-  // ÖZƏL ONAY / SİLME MODALI (MISSCLICK ÖNLƏYİCİ)
+  // Модальное окно подтверждения удаления
   const [confirmModal, setConfirmModal] = useState({
     isOpen: false,
     groupClass: null
   });
 
-  // Yeni dərs əlavə etmək üçün Modal State
+  // Состояние модального окна добавления нового занятия
   const [showAddModal, setShowAddModal] = useState(false);
-  const [classNameInput, setClassNameInput] = useState('');
+  const [classNameSelection, setClassNameSelection] = useState(availableClassNames[0]);
+  const [customClassName, setCustomClassName] = useState('');
   const [trainerInput, setTrainerInput] = useState(trainersList[0]);
   const [dayInput, setDayInput] = useState('Bazar ertəsi');
   const [timeInput, setTimeInput] = useState('11:00');
   const [capacityInput, setCapacityInput] = useState(7);
   const [isPaidInput, setIsPaidInput] = useState(true);
   const [priceInput, setPriceInput] = useState('20 AZN');
-  const [participantInput, setParticipantInput] = useState('');
+  
+  // Выбранные из базы гости для нового занятия
+  const [selectedGuestsForNewClass, setSelectedGuestsForNewClass] = useState(['Ayan Xəlilova']);
 
-  // Müştərinin iştirak statusunu dəyişmək (Check-in)
+  // Переключение Check-in статуса участника
   const handleToggleAttendance = (classId, participantIndex) => {
     const updatedSchedule = schedule.map(item => {
       if (item.id === classId) {
@@ -82,7 +123,7 @@ export default function GroupTraining() {
     setSelectedClass(currentClass);
   };
 
-  // Dərsin statusunu dəyişmək
+  // Изменение статуса занятия
   const handleToggleStatus = (id) => {
     setSchedule(schedule.map(item => {
       if (item.id === id) {
@@ -95,7 +136,7 @@ export default function GroupTraining() {
     }));
   };
 
-  // Dərsi silmək
+  // Удаление занятия
   const handleDeleteClass = () => {
     if (!confirmModal.groupClass) return;
     setSchedule(schedule.filter(s => s.id !== confirmModal.groupClass.id));
@@ -105,17 +146,26 @@ export default function GroupTraining() {
     setConfirmModal({ isOpen: false, groupClass: null });
   };
 
+  // Выбор/отмена гостя для нового занятия
+  const toggleGuestSelection = (guestName) => {
+    if (selectedGuestsForNewClass.includes(guestName)) {
+      setSelectedGuestsForNewClass(selectedGuestsForNewClass.filter(g => g !== guestName));
+    } else {
+      setSelectedGuestsForNewClass([...selectedGuestsForNewClass, guestName]);
+    }
+  };
+
+  // Добавление нового занятия в расписание
   const handleAddClass = (e) => {
     e.preventDefault();
-    if (!classNameInput) return;
+    const finalClassName = classNameSelection === 'Digər (Özüm daxil edəcəyəm)' ? customClassName : classNameSelection;
+    if (!finalClassName) return;
 
-    const participantsList = participantInput 
-      ? participantInput.split(',').map(p => ({ name: p.trim(), attended: false })) 
-      : [];
+    const participantsList = selectedGuestsForNewClass.map(name => ({ name, attended: false }));
 
     const newEntry = {
       id: `GRP-10${schedule.length + 1}`,
-      className: classNameInput,
+      className: finalClassName,
       trainer: trainerInput,
       day: dayInput,
       time: timeInput,
@@ -127,8 +177,9 @@ export default function GroupTraining() {
     };
 
     setSchedule([newEntry, ...schedule]);
-    setClassNameInput('');
-    setParticipantInput('');
+    setClassNameSelection(availableClassNames[0]);
+    setCustomClassName('');
+    setSelectedGuestsForNewClass(['Ayan Xəlilova']);
     setShowAddModal(false);
   };
 
@@ -141,12 +192,12 @@ export default function GroupTraining() {
           <h3 className="font-extrabold text-slate-900 text-sm tracking-tight flex items-center gap-2">
             <Users className="text-purple-600" size={18} /> Həftəlik Qrup Dərsləri Və Attendance Matrisi
           </h3>
-          <p className="text-[11px] text-slate-500 mt-0.5">Tutumu (Max capacity), canlı iştirak sayını görün və gələn müştəriləri tək kliklə "Check-in" edin.</p>
+          <p className="text-[11px] text-slate-500 mt-0.5">Tutumu görün, dərs adını, qonaqları və təlimçiləri bazadan seçərək dərs təyin edin.</p>
         </div>
 
         <button 
           onClick={() => setShowAddModal(true)}
-          className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3.5 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs"
+          className="bg-purple-600 hover:bg-purple-700 text-white font-bold px-3.5 py-1.5 rounded-xl text-xs transition flex items-center gap-1.5 shadow-xs cursor-pointer"
         >
           <Plus size={15} /> Qrafikə Dərs Əlavə Et
         </button>
@@ -225,7 +276,7 @@ export default function GroupTraining() {
         </div>
       </div>
 
-      {/* FULL VIEWPORT ONAY / SİLME MODALI */}
+      {/* МОДАЛЬНОЕ ОКНО УДАЛЕНИЯ */}
       {confirmModal.isOpen && confirmModal.groupClass && (
         <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-md z-[9999] flex items-center justify-center p-0 m-0 animate-in fade-in duration-200">
           <div className="bg-white rounded-3xl shadow-2xl max-w-md w-full p-6 space-y-5 border border-slate-200 text-center relative overflow-hidden animate-in zoom-in-95 duration-200">
@@ -246,7 +297,7 @@ export default function GroupTraining() {
                 <span className="text-slate-900 font-bold">{confirmModal.groupClass.trainer}</span>
               </div>
               <div className="flex justify-between">
-                <span>Qayıdış / Rezerv:</span>
+                <span>Rezerv:</span>
                 <span className="text-purple-700 font-bold">{confirmModal.groupClass.participants.length} / {confirmModal.groupClass.maxCapacity} Nəfər</span>
               </div>
             </div>
@@ -254,13 +305,13 @@ export default function GroupTraining() {
             <div className="grid grid-cols-2 gap-2 pt-2">
               <button 
                 onClick={handleDeleteClass}
-                className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1 shadow-xs"
+                className="w-full py-2.5 bg-rose-600 hover:bg-rose-700 text-white font-bold rounded-xl text-xs transition flex items-center justify-center gap-1 shadow-xs cursor-pointer"
               >
                 <Trash2 size={14} /> Təsdiq Et Və Sil
               </button>
               <button 
                 onClick={() => setConfirmModal({ isOpen: false, groupClass: null })}
-                className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition"
+                className="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition cursor-pointer"
               >
                 Ləğv Et
               </button>
@@ -269,7 +320,7 @@ export default function GroupTraining() {
         </div>
       )}
 
-      {/* FULL VIEWPORT CHECK-IN & DETAL MODALI */}
+      {/* МОДАЛЬНОЕ ОКНО ДЕТАЛЕЙ И CHECK-IN */}
       {selectedClass && (
         <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-md z-[9999] flex items-center justify-center p-0 m-0 animate-in fade-in duration-200">
           <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 animate-in zoom-in-95 duration-200">
@@ -278,7 +329,7 @@ export default function GroupTraining() {
                 <span className="text-[10px] font-mono text-slate-400 font-bold uppercase">{selectedClass.id}</span>
                 <h3 className="font-black text-slate-900 text-base">{selectedClass.className}</h3>
               </div>
-              <button onClick={() => setSelectedClass(null)} className="p-1 text-slate-400 hover:text-slate-600 rounded-full">
+              <button onClick={() => setSelectedClass(null)} className="p-1 text-slate-400 hover:text-slate-600 rounded-full cursor-pointer">
                 <X size={18} />
               </button>
             </div>
@@ -347,7 +398,7 @@ export default function GroupTraining() {
             <div className="pt-3 border-t flex justify-between items-center gap-2">
               <button 
                 onClick={() => handleToggleStatus(selectedClass.id)}
-                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs ${
+                className={`px-3 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs cursor-pointer ${
                   selectedClass.status === 'Keçirildi' 
                     ? 'bg-amber-100 text-amber-800 hover:bg-amber-200' 
                     : 'bg-emerald-600 text-white hover:bg-emerald-700'
@@ -359,14 +410,14 @@ export default function GroupTraining() {
 
               <button 
                 onClick={() => setConfirmModal({ isOpen: true, groupClass: selectedClass })}
-                className="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold rounded-xl text-xs transition"
+                className="px-3 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 border border-rose-200 font-bold rounded-xl text-xs transition cursor-pointer"
               >
                 Dərsi Sil
               </button>
 
               <button 
                 onClick={() => setSelectedClass(null)}
-                className="px-3 py-2 border rounded-xl font-bold text-slate-600 hover:bg-slate-50 text-xs"
+                className="px-3 py-2 border rounded-xl font-bold text-slate-600 hover:bg-slate-50 text-xs cursor-pointer"
               >
                 Bağla
               </button>
@@ -375,39 +426,53 @@ export default function GroupTraining() {
         </div>
       )}
 
-      {/* FULL VIEWPORT YENİ DƏRS ƏLAVƏ MODALI */}
+      {/* МОДАЛЬНОЕ ОКНО ДОБАВЛЕНИЯ ЗАНЯТИЯ (С ВЫБОРОМ ДАТЫ, ИНСТРУКТОРОВ И ГОСТЕЙ) */}
       {showAddModal && (
         <div className="fixed inset-0 w-screen h-screen bg-slate-900/60 backdrop-blur-md z-[9999] flex items-center justify-center p-0 m-0 animate-in fade-in duration-200">
-          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 animate-in zoom-in-95 duration-200">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 space-y-4 border border-slate-200 animate-in zoom-in-95 duration-200 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="font-black text-slate-900 text-sm flex items-center gap-2">
                 <Users className="text-purple-600" size={18} /> Qrafikə Dərs Əlavə Et
               </h3>
-              <button onClick={() => setShowAddModal(false)} className="p-1 text-slate-400 hover:text-slate-600 rounded-full">
+              <button onClick={() => setShowAddModal(false)} className="p-1 text-slate-400 hover:text-slate-600 rounded-full cursor-pointer">
                 <X size={18} />
               </button>
             </div>
 
             <form onSubmit={handleAddClass} className="space-y-3 text-xs">
+              {/* Дəрс Ады (Выпадающий список + Ручной ввод при выборе "Digər") */}
               <div>
                 <label className="font-bold text-slate-700 block mb-1">Dərs Adı:</label>
-                <input 
-                  type="text" 
-                  placeholder="Məs: Spinning / Cycle, Yoga" 
-                  value={classNameInput}
-                  onChange={e => setClassNameInput(e.target.value)}
-                  className="w-full p-2.5 border rounded-lg font-medium bg-slate-50 focus:bg-white"
-                  required
-                />
+                <select 
+                  value={classNameSelection}
+                  onChange={e => setClassNameSelection(e.target.value)}
+                  className="w-full p-2.5 border rounded-lg font-bold bg-slate-50 cursor-pointer mb-1.5"
+                >
+                  {availableClassNames.map(cName => (
+                    <option key={cName} value={cName}>{cName}</option>
+                  ))}
+                </select>
+
+                {classNameSelection === 'Digər (Özüm daxil edəcəyəm)' && (
+                  <input 
+                    type="text" 
+                    placeholder="Məs: Advanced Stretching, Pilates Pro..." 
+                    value={customClassName}
+                    onChange={e => setCustomClassName(e.target.value)}
+                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50 focus:bg-white"
+                    required
+                  />
+                )}
               </div>
 
+              {/* Мəшгчи / Тренеры из базы */}
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <label className="font-bold text-slate-700 block mb-1">Məşqçi:</label>
+                  <label className="font-bold text-slate-700 block mb-1">Məşqçi (Baza):</label>
                   <select 
                     value={trainerInput}
                     onChange={e => setTrainerInput(e.target.value)}
-                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50"
+                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50 cursor-pointer"
                   >
                     {trainersList.map(t => (
                       <option key={t} value={t}>{t}</option>
@@ -433,7 +498,7 @@ export default function GroupTraining() {
                   <select 
                     value={dayInput}
                     onChange={e => setDayInput(e.target.value)}
-                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50"
+                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50 cursor-pointer"
                   >
                     {daysOfWeek.map(d => (
                       <option key={d} value={d}>{d}</option>
@@ -445,7 +510,7 @@ export default function GroupTraining() {
                   <select 
                     value={timeInput}
                     onChange={e => setTimeInput(e.target.value)}
-                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50"
+                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50 cursor-pointer"
                   >
                     {timeSlots.map(t => (
                       <option key={t} value={t}>{t}</option>
@@ -460,7 +525,7 @@ export default function GroupTraining() {
                   <select 
                     value={isPaidInput ? 'yes' : 'no'}
                     onChange={e => setIsPaidInput(e.target.value === 'yes')}
-                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50"
+                    className="w-full p-2.5 border rounded-lg font-bold bg-slate-50 cursor-pointer"
                   >
                     <option value="yes">Ödənişli</option>
                     <option value="no">Pulsuz (Abunə)</option>
@@ -477,28 +542,42 @@ export default function GroupTraining() {
                 </div>
               </div>
 
+              {/* Участники / Гости из базы клуба */}
               <div>
-                <label className="font-bold text-slate-700 block mb-1">İştirakçılar (vergüllə ayırın):</label>
-                <input 
-                  type="text" 
-                  placeholder="Məs: Ayan Xəlilova, Kamran Alıyev, Leyla M." 
-                  value={participantInput}
-                  onChange={e => setParticipantInput(e.target.value)}
-                  className="w-full p-2.5 border rounded-lg font-medium bg-slate-50 focus:bg-white"
-                />
+                <label className="font-bold text-slate-700 block mb-1">İştirakçılar (Bazadan Qonaqları Seçin):</label>
+                <div className="bg-slate-50 border border-slate-200 rounded-xl p-2.5 max-h-36 overflow-y-auto space-y-1.5">
+                  <p className="text-[10px] text-slate-500 font-medium mb-1">
+                    Seçilib: <span className="font-bold text-slate-800">{selectedGuestsForNewClass.join(', ') || 'Heç kim seçilməyib'}</span>
+                  </p>
+                  {allClubGuests.map((guest, idx) => {
+                    const isChecked = selectedGuestsForNewClass.includes(guest);
+                    return (
+                      <div 
+                        key={idx} 
+                        onClick={() => toggleGuestSelection(guest)}
+                        className={`p-2 rounded-lg border text-xs flex justify-between items-center cursor-pointer transition ${
+                          isChecked ? 'bg-purple-50 border-purple-200 font-bold text-purple-950' : 'bg-white border-slate-200 text-slate-700'
+                        }`}
+                      >
+                        <span>{guest}</span>
+                        {isChecked ? <Check size={14} className="text-purple-600" /> : <span className="text-[10px] text-slate-400">Seç</span>}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
 
               <div className="pt-3 border-t flex justify-end gap-2">
                 <button 
                   type="button" 
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 border rounded-xl font-bold text-slate-600 hover:bg-slate-50"
+                  className="px-4 py-2 border rounded-xl font-bold text-slate-600 hover:bg-slate-50 cursor-pointer"
                 >
                   Ləğv
                 </button>
                 <button 
                   type="submit" 
-                  className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-xs"
+                  className="px-5 py-2 bg-purple-600 hover:bg-purple-700 text-white font-bold rounded-xl shadow-xs cursor-pointer"
                 >
                   Cədvələ Əlavə Et
                 </button>
